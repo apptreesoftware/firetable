@@ -96,14 +96,14 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
   const [userRoles, setUserRoles] = useState<null | string[]>();
   const [userClaims, setUserClaims] = useState<any>();
 
-  const { currentUser } = useAppContext();
+  const { currentUser, userDoc } = useAppContext();
   useEffect(() => {
     const { tables } = settings;
+    const team = userDoc.state?.doc?.domain;
     if (tables && userRoles && !sections) {
       const filteredTables = _sortBy(tables, "name")
         .filter(
-          (table) =>
-            !table.roles || table.roles.some((role) => userRoles.includes(role))
+          (table) => userRoles.includes("APPTREE") || table.section === team
         )
         .map((table) => ({
           ...table,
@@ -114,7 +114,7 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
       setSections(_sections);
       setTables(filteredTables);
     }
-  }, [settings, userRoles, sections]);
+  }, [settings, userRoles, sections, userDoc]);
 
   useEffect(() => {
     if (currentUser && !userClaims) {
