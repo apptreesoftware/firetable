@@ -102,4 +102,8 @@ const useFiretable = (
   return { tableState: state, tableActions: actions };
 };
 
+export function tablePath(path: string) {
+  return `_FIRETABLE_/data/${path}`;
+}
+
 export default useFiretable;

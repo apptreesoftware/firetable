@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import React, { useEffect, useReducer, useContext } from "react";
 import equals from "ramda/es/equals";
 import firebase from "firebase/app";
-import { FireTableFilter, FiretableOrderBy } from ".";
+import { FireTableFilter, FiretableOrderBy, tablePath } from ".";
 import { SnackContext } from "../../contexts/snackContext";
 import { cloudFunction } from "../../firebase/callables";
 import { isCollectionGroup, generateSmallerId } from "util/fns";
@@ -66,7 +66,7 @@ const useTable = (initialOverrides: any) => {
       | firebase.firestore.CollectionReference
       | firebase.firestore.Query = isCollectionGroup()
       ? db.collectionGroup(tableState.path)
-      : db.collection(tableState.path);
+      : db.collection(tablePath(tableState.path));
 
     filters.forEach((filter) => {
       if (filter.key && filter.operator && filter.value !== undefined)
@@ -124,7 +124,7 @@ const useTable = (initialOverrides: any) => {
             cloudFunction(
               "callable-setFiretablePersonalizedFilter",
               {
-                table: tableState.path,
+                table: tablePath(tableState.path),
               },
               (resp) => {
                 console.log(resp);
@@ -196,7 +196,7 @@ const useTable = (initialOverrides: any) => {
     tableDispatch({ rows: tableState.rows });
     // delete document
     try {
-      db.collection(tableState.path).doc(documentId).delete();
+      db.collection(tablePath(tableState.path)).doc(documentId).delete();
     } catch (error) {
       console.log(error);
       if (error.code === "permission-denied") {
@@ -244,11 +244,14 @@ const useTable = (initialOverrides: any) => {
     };
     try {
       if (rows.length === 0) {
-        await db.collection(path).add(docData);
+        await db.collection(tablePath(path)).add(docData);
       } else {
         const firstId = rows[0].id;
         const newId = generateSmallerId(firstId);
-        await db.collection(path).doc(newId).set(docData, { merge: true });
+        await db
+          .collection(tablePath(path))
+          .doc(newId)
+          .set(docData, { merge: true });
       }
     } catch (error) {
       if (error.code === "permission-denied") {
