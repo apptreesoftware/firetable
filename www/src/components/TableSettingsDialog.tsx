@@ -151,7 +151,7 @@ export default function TableSettingsDialog({
             variant="filled"
             margin="dense"
             id="section"
-            label="Section Name"
+            label="Team ID"
             type="text"
             fullWidth
           />

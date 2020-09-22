@@ -10,6 +10,11 @@ function getColorByBgColor(bgColor) {
     : "#fff";
 }
 export default function Firetable(props: SvgIconProps) {
+  return (
+    <>
+      <h2>AppTree IO</h2>
+    </>
+  );
   const theme = useTheme();
   const primaryColor = theme.palette.primary.main;
   //const strokeColor = getColorByBgColor(primaryColor);
