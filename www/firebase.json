@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "target": "firetable",
+    "target": "apptreeio-data",
     "public": "build",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [

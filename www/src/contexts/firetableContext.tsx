@@ -103,7 +103,8 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
     if (tables && userRoles && !sections) {
       const filteredTables = _sortBy(tables, "name")
         .filter(
-          (table) => userRoles.includes("APPTREE") || table.section === team
+          (table) =>
+            userRoles.includes("FIRETABLE_ADMIN") || table.section === team
         )
         .map((table) => ({
           ...table,
