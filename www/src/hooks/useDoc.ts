@@ -45,6 +45,7 @@ const useDoc = (intialOverrides: any) => {
         const id = snapshot.id;
         const ref = snapshot.ref;
         const doc = { ...data, id, ref };
+        console.log(`DispatchDoc: ${documentState.path}`);
         documentDispatch({
           doc,
           ref,

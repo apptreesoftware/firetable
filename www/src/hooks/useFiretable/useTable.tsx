@@ -26,11 +26,11 @@ const tableInitialState = {
   limit: 50,
   loading: true,
   cap: CAP,
+  pathPrefix: undefined,
 };
 
 const useTable = (initialOverrides: any) => {
   const snack = useContext(SnackContext);
-
   const [tableState, tableDispatch] = useReducer(tableReducer, {
     ...tableInitialState,
     ...initialOverrides,
@@ -66,7 +66,7 @@ const useTable = (initialOverrides: any) => {
       | firebase.firestore.CollectionReference
       | firebase.firestore.Query = isCollectionGroup()
       ? db.collectionGroup(tableState.path)
-      : db.collection(tablePath(tableState.path));
+      : db.collection(tablePath(tableState.path, tableState.pathPrefix));
 
     filters.forEach((filter) => {
       if (filter.key && filter.operator && filter.value !== undefined)
@@ -124,7 +124,7 @@ const useTable = (initialOverrides: any) => {
             cloudFunction(
               "callable-setFiretablePersonalizedFilter",
               {
-                table: tablePath(tableState.path),
+                table: tablePath(tableState.path, tableState.pathPrefix),
               },
               (resp) => {
                 console.log(resp);
@@ -161,6 +161,7 @@ const useTable = (initialOverrides: any) => {
       path,
       orderBy,
       unsubscribe,
+      pathPrefix,
     } = tableState;
 
     if (
@@ -168,7 +169,8 @@ const useTable = (initialOverrides: any) => {
         !equals(prevFilters, filters) ||
         prevLimit !== limit ||
         prevOrderBy !== orderBy) &&
-      path
+      path &&
+      pathPrefix !== undefined
     ) {
       if (unsubscribe) {
         tableState.unsubscribe();
@@ -185,6 +187,7 @@ const useTable = (initialOverrides: any) => {
     tableState.limit,
     tableState.path,
     tableState.orderBy,
+    tableState.pathPrefix,
   ]);
   /**  used deleting row/doc
    *  @param rowIndex local position
@@ -196,7 +199,9 @@ const useTable = (initialOverrides: any) => {
     tableDispatch({ rows: tableState.rows });
     // delete document
     try {
-      db.collection(tablePath(tableState.path)).doc(documentId).delete();
+      db.collection(tablePath(tableState.path, tableState.pathPrefix))
+        .doc(documentId)
+        .delete();
     } catch (error) {
       console.log(error);
       if (error.code === "permission-denied") {
@@ -224,6 +229,12 @@ const useTable = (initialOverrides: any) => {
     if (filters) tableDispatch({ filters });
   };
 
+  const setPathPrefix = (pathPrefix: string) => {
+    if (pathPrefix !== tableState.pathPrefix) {
+      tableDispatch({ pathPrefix: pathPrefix });
+    }
+  };
+
   const filterReducer = (acc, curr) => {
     if (curr.operator === "==") {
       return { ...acc, [curr.key]: curr.value };
@@ -235,7 +246,6 @@ const useTable = (initialOverrides: any) => {
   const addRow = async (data?: any) => {
     const valuesFromFilter = tableState.filters.reduce(filterReducer, {});
     const { rows, path } = tableState;
-
     const docData = {
       ...valuesFromFilter,
       createdAt: serverTimestamp(),
@@ -244,12 +254,14 @@ const useTable = (initialOverrides: any) => {
     };
     try {
       if (rows.length === 0) {
-        await db.collection(tablePath(path)).add(docData);
+        await db
+          .collection(tablePath(path, tableState.pathPrefix))
+          .add(docData);
       } else {
         const firstId = rows[0].id;
         const newId = generateSmallerId(firstId);
         await db
-          .collection(tablePath(path))
+          .collection(tablePath(path, tableState.pathPrefix))
           .doc(newId)
           .set(docData, { merge: true });
       }
@@ -284,6 +296,7 @@ const useTable = (initialOverrides: any) => {
     setTable,
     addRow,
     moreRows,
+    setPathPrefix,
     dispatch: tableDispatch,
   };
   return [tableState, tableActions];

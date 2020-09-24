@@ -1,5 +1,6 @@
 import useTable from "./useTable";
 import useTableConfig from "./useTableConfig";
+import { useEffect } from "react";
 
 export type FiretableActions = {
   // TODO: Stricter types here
@@ -48,6 +49,14 @@ const useFiretable = (
     filters,
     orderBy,
   });
+
+  useEffect(() => {
+    if (tableConfig.doc) {
+      tableActions.setPathPrefix(
+        `team_data/${tableConfig.doc.section ?? null}`
+      );
+    }
+  }, [tableConfig.doc]);
 
   /** set collection path of table */
   const setTable = (collectionName: string, filters: FireTableFilter[]) => {
@@ -102,8 +111,11 @@ const useFiretable = (
   return { tableState: state, tableActions: actions };
 };
 
-export function tablePath(path: string) {
-  return `_FIRETABLE_/data/${path}`;
+export function tablePath(path: string, pathPrefix?: string) {
+  if (pathPrefix) {
+    return `${pathPrefix}/${path}`;
+  }
+  return path;
 }
 
 export default useFiretable;
