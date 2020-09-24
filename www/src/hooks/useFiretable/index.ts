@@ -52,9 +52,11 @@ const useFiretable = (
 
   useEffect(() => {
     if (tableConfig.doc) {
-      tableActions.setPathPrefix(
-        `team_data/${tableConfig.doc.section ?? null}`
-      );
+      if (tableConfig.doc.section) {
+        tableActions.setPathPrefix(`team_data/${tableConfig.doc.section}`);
+      } else {
+        tableActions.setPathPrefix(null);
+      }
     }
   }, [tableConfig.doc]);
 
