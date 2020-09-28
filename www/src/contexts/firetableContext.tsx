@@ -12,6 +12,8 @@ import { useAppContext } from "./appContext";
 import { useSnackContext } from "./snackContext";
 import { SideDrawerRef } from "components/SideDrawer";
 import { ColumnMenuRef } from "components/Table/ColumnMenu";
+import useDoc from "../hooks/useDoc";
+import { db } from "../firebase";
 
 export type Table = {
   collection: string;
@@ -100,20 +102,35 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
   useEffect(() => {
     const { tables } = settings;
     const team = userDoc.state?.doc?.domain;
+
     if (tables && userRoles && !sections) {
-      const filteredTables = _sortBy(tables, "name")
-        .filter(
-          (table) =>
-            userRoles.includes("FIRETABLE_ADMIN") || table.section === team
-        )
-        .map((table) => ({
+      if (userRoles.includes("FIRETABLE_ADMIN")) {
+        const filteredTables = _sortBy(tables, "name").map((table) => ({
           ...table,
           section: table.section ? table.section.toUpperCase().trim() : "OTHER",
         }));
-
-      const _sections = _groupBy(filteredTables, "section");
-      setSections(_sections);
-      setTables(filteredTables);
+        const _sections = _groupBy(filteredTables, "section");
+        setSections(_sections);
+        setTables(filteredTables);
+      } else {
+        db.collection("apps")
+          .where("team", "==", team)
+          .get()
+          .then((projects) => {
+            const projectIds = projects.docs.map((p) => p.id);
+            const filteredTables = _sortBy(tables, "name")
+              .filter((table) => projectIds.includes(table.section))
+              .map((table) => ({
+                ...table,
+                section: table.section
+                  ? table.section.toUpperCase().trim()
+                  : "OTHER",
+              }));
+            const _sections = _groupBy(filteredTables, "section");
+            setSections(_sections);
+            setTables(filteredTables);
+          });
+      }
     }
   }, [settings, userRoles, sections, userDoc]);
 
