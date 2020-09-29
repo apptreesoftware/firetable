@@ -27,6 +27,7 @@ const useSettings = () => {
     description: string;
     roles: string[];
     copySchema: string;
+    section: string;
   }) => {
     const { tables } = settingsState;
     // updates the setting doc
@@ -38,6 +39,10 @@ const useSettings = () => {
 
     const schemaToCopy = data.copySchema;
     delete data["copySchema"];
+
+    if (data.section) {
+      data.collection = `${data.section}_${data.collection}`;
+    }
 
     if (schemaToCopy) {
       db.collection("_FIRETABLE_/settings/schema")
