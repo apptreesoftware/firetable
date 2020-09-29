@@ -50,16 +50,6 @@ const useFiretable = (
     orderBy,
   });
 
-  useEffect(() => {
-    if (tableConfig.doc) {
-      if (tableConfig.doc.section) {
-        tableActions.setPathPrefix(`team_data/${tableConfig.doc.section}`);
-      } else {
-        tableActions.setPathPrefix(null);
-      }
-    }
-  }, [tableConfig.doc]);
-
   /** set collection path of table */
   const setTable = (collectionName: string, filters: FireTableFilter[]) => {
     if (collectionName !== tableState.path || filters !== tableState.filters) {

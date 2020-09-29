@@ -26,11 +26,11 @@ const tableInitialState = {
   limit: 50,
   loading: true,
   cap: CAP,
-  pathPrefix: undefined,
 };
 
 const useTable = (initialOverrides: any) => {
   const snack = useContext(SnackContext);
+
   const [tableState, tableDispatch] = useReducer(tableReducer, {
     ...tableInitialState,
     ...initialOverrides,
@@ -161,7 +161,6 @@ const useTable = (initialOverrides: any) => {
       path,
       orderBy,
       unsubscribe,
-      pathPrefix,
     } = tableState;
 
     if (
@@ -169,8 +168,7 @@ const useTable = (initialOverrides: any) => {
         !equals(prevFilters, filters) ||
         prevLimit !== limit ||
         prevOrderBy !== orderBy) &&
-      path &&
-      pathPrefix !== undefined
+      path
     ) {
       if (unsubscribe) {
         tableState.unsubscribe();
@@ -187,7 +185,6 @@ const useTable = (initialOverrides: any) => {
     tableState.limit,
     tableState.path,
     tableState.orderBy,
-    tableState.pathPrefix,
   ]);
   /**  used deleting row/doc
    *  @param rowIndex local position
@@ -225,12 +222,6 @@ const useTable = (initialOverrides: any) => {
       });
     }
     if (filters) tableDispatch({ filters });
-  };
-
-  const setPathPrefix = (pathPrefix: string) => {
-    if (pathPrefix !== tableState.pathPrefix) {
-      tableDispatch({ pathPrefix: pathPrefix });
-    }
   };
 
   const filterReducer = (acc, curr) => {
@@ -292,7 +283,6 @@ const useTable = (initialOverrides: any) => {
     setTable,
     addRow,
     moreRows,
-    setPathPrefix,
     dispatch: tableDispatch,
   };
   return [tableState, tableActions];
