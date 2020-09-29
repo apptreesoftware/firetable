@@ -66,7 +66,7 @@ const useTable = (initialOverrides: any) => {
       | firebase.firestore.CollectionReference
       | firebase.firestore.Query = isCollectionGroup()
       ? db.collectionGroup(tableState.path)
-      : db.collection(tablePath(tableState.path, tableState.pathPrefix));
+      : db.collection(tablePath(tableState.path));
 
     filters.forEach((filter) => {
       if (filter.key && filter.operator && filter.value !== undefined)
@@ -124,7 +124,7 @@ const useTable = (initialOverrides: any) => {
             cloudFunction(
               "callable-setFiretablePersonalizedFilter",
               {
-                table: tablePath(tableState.path, tableState.pathPrefix),
+                table: tablePath(tableState.path),
               },
               (resp) => {
                 console.log(resp);
@@ -199,9 +199,7 @@ const useTable = (initialOverrides: any) => {
     tableDispatch({ rows: tableState.rows });
     // delete document
     try {
-      db.collection(tablePath(tableState.path, tableState.pathPrefix))
-        .doc(documentId)
-        .delete();
+      db.collection(tablePath(tableState.path)).doc(documentId).delete();
     } catch (error) {
       console.log(error);
       if (error.code === "permission-denied") {
@@ -254,14 +252,12 @@ const useTable = (initialOverrides: any) => {
     };
     try {
       if (rows.length === 0) {
-        await db
-          .collection(tablePath(path, tableState.pathPrefix))
-          .add(docData);
+        await db.collection(tablePath(path)).add(docData);
       } else {
         const firstId = rows[0].id;
         const newId = generateSmallerId(firstId);
         await db
-          .collection(tablePath(path, tableState.pathPrefix))
+          .collection(tablePath(path))
           .doc(newId)
           .set(docData, { merge: true });
       }

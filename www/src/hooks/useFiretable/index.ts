@@ -113,9 +113,10 @@ const useFiretable = (
   return { tableState: state, tableActions: actions };
 };
 
-export function tablePath(path: string, pathPrefix?: string) {
-  if (pathPrefix) {
-    return `${pathPrefix}/${path}`;
+export function tablePath(path: string) {
+  const prefix = process.env.REACT_APP_DATA_PATH_PREFIX;
+  if (prefix) {
+    return `${prefix}/${path}`;
   }
   return path;
 }
