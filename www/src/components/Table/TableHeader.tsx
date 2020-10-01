@@ -1,13 +1,13 @@
 import React from "react";
 
 import {
-  makeStyles,
+  Button,
   createStyles,
   Grid,
-  TextField,
+  makeStyles,
   MenuItem,
+  TextField,
   Typography,
-  Button,
 } from "@material-ui/core";
 
 import { isCollectionGroup } from "../../util/fns";
@@ -22,7 +22,8 @@ import { useFiretableContext } from "contexts/firetableContext";
 import { FieldType } from "constants/fields";
 import MigrateButton from "./MigrateButton";
 import HiddenFields from "./HidenFields";
-//import Settings from "./Settings";
+import TableHeaderActionButton from "./TableHeaderActionButton";
+import { useSnackContext } from "../../contexts/snackContext";
 export const TABLE_HEADER_HEIGHT = 56;
 
 const useStyles = makeStyles((theme) =>
@@ -73,6 +74,7 @@ export default function TableHeader({
 }: ITableHeaderProps) {
   const classes = useStyles();
   const { tableActions, tableState } = useFiretableContext();
+  const snack = useSnackContext();
   if (!tableState || !tableState.columns) return <></>;
   const { columns } = tableState;
 
@@ -166,9 +168,21 @@ export default function TableHeader({
           <ImportCSV />
         </Grid>
       )}
-
       <Grid item>
         <ExportCSV />
+      </Grid>
+      <Grid item>
+        <TableHeaderActionButton
+          tableActions={tableState.tableActions}
+          actionHandler={async (action) => {
+            snack.open({ message: `Performing action ${action.actionName}` });
+            await tableActions?.table?.performAction(action);
+            snack.open({
+              message: `${action.actionName} complete`,
+              duration: 1000,
+            });
+          }}
+        />
       </Grid>
       {/* <Settings /> */}
     </Grid>
