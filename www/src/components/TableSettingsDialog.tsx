@@ -21,11 +21,18 @@ import { useFiretableContext } from "../contexts/firetableContext";
 import RolesSelector from "./RolesSelector";
 import Confirmation from "components/Confirmation";
 import TableSelector from "./TableSelector";
+import TableActionsInput from "./TableActionInput";
 
 export enum TableSettingsDialogModes {
   create,
   update,
 }
+
+export interface TableAction {
+  actionName: string;
+  webhookUrl: string;
+}
+
 export interface ICreateTableDialogProps {
   /** dialog Modes create or udpate table */
 
@@ -39,8 +46,11 @@ export interface ICreateTableDialogProps {
     name: string;
     isCollectionGroup: boolean;
     copySchema: string;
+    tableActions: TableAction[];
   } | null;
 }
+
+const emptyActions: TableAction[] = [];
 
 const FORM_EMPTY_STATE = {
   name: "",
@@ -50,6 +60,7 @@ const FORM_EMPTY_STATE = {
   roles: ["ADMIN"],
   isCollectionGroup: false,
   copySchema: "",
+  tableActions: emptyActions,
 };
 export default function TableSettingsDialog({
   mode,
@@ -183,6 +194,14 @@ export default function TableSettingsDialog({
               label="Copy Schema"
             />
           )}
+          <DialogContentText>Table Actions</DialogContentText>
+          <TableActionsInput
+            label="Actions"
+            value={formState.tableActions ?? []}
+            handleChange={(update) => {
+              handleChange("tableActions", update);
+            }}
+          />
         </DialogContent>
 
         {mode === TableSettingsDialogModes.update && (

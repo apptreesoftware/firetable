@@ -28,6 +28,7 @@ import { useFiretableContext } from "contexts/firetableContext";
 import { useAppContext } from "contexts/appContext";
 import { DocActions } from "hooks/useDoc";
 import TableSettingsDialog, {
+  TableAction,
   TableSettingsDialogModes,
 } from "components/TableSettingsDialog";
 
@@ -96,6 +97,7 @@ const TablesView = () => {
       section: string;
       isCollectionGroup: boolean;
       copySchema: string;
+      tableActions: TableAction[];
     };
   }>({
     mode: null,

@@ -1,6 +1,7 @@
 import useTable from "./useTable";
 import useTableConfig from "./useTableConfig";
-import { useEffect } from "react";
+import { TableAction } from "../../components/TableSettingsDialog";
+import { db } from "../../firebase";
 
 export type FiretableActions = {
   // TODO: Stricter types here
@@ -18,6 +19,7 @@ export type FiretableActions = {
     filter: Function;
     updateConfig: Function;
     orderBy: Function;
+    performAction: Function;
   };
 };
 
@@ -31,6 +33,7 @@ export type FiretableState = {
   filters: FireTableFilter[];
   loadingRows: boolean;
   loadingColumns: boolean;
+  tableActions: TableAction[];
 };
 export type FireTableFilter = {
   key: string;
@@ -57,6 +60,30 @@ const useFiretable = (
       tableActions.setTable(collectionName, filters);
     }
   };
+
+  const performTableAction = async (tableAction: TableAction) => {
+    console.log(`Perform action :${JSON.stringify(tableAction)}`);
+    try {
+      const uri = new URL(tableAction.webhookUrl);
+      const snapshot = await db.collection(tablePath(tableState.path)).get();
+      await fetch(uri.toString(), {
+        method: "POST",
+        body: JSON.stringify({
+          rows: snapshot.docs.map((d) => {
+            return {
+              _id: d.id,
+              ...d.data(),
+            };
+          }),
+          collectionName: tableState.path,
+        }),
+        headers: { "content-type": "application/json" },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const filterTable = (filters: FireTableFilter[]) => {
     tableActions.dispatch({ filters });
   };
@@ -77,6 +104,7 @@ const useFiretable = (
     queryLimit: tableState.limit,
     loadingRows: tableState.loading,
     loadingColumns: tableConfig.loading,
+    tableActions: tableConfig.doc?.tableActions,
   };
   const actions: FiretableActions = {
     column: {
@@ -97,6 +125,7 @@ const useFiretable = (
       set: setTable,
       orderBy: setOrder,
       filter: filterTable,
+      performAction: performTableAction,
     },
   };
 
