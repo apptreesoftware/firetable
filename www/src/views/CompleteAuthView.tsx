@@ -36,9 +36,14 @@ export default function CompleteAuthView() {
     setLoading(true);
     const params = new URLSearchParams(router.location.search);
     const token = params.get("t") as string;
+    const path = params.get("path") as string;
     try {
       await auth.signInWithCustomToken(token);
-      router.history.replace("/");
+      if (path) {
+        router.history.replace(path);
+      } else {
+        router.history.replace("/");
+      }
     } catch (e) {
       setErrorMsg(`Sign in failed: ${e}`);
     } finally {
