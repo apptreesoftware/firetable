@@ -155,7 +155,7 @@ export default function Image({
   });
 
   const dropzoneProps = getRootProps();
-  const disabled = column.editable === false;
+  const disabled = column.editable === false || row._readonly_;
 
   let thumbnailSize = "100x100";
   if (tableState?.config?.rowHeight) {

@@ -11,7 +11,6 @@ import ChevronDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import Form from "./Form";
 import { Field } from "./Form/utils";
 import ErrorBoundary from "components/ErrorBoundary";
-
 import { useStyles } from "./useStyles";
 import { useFiretableContext } from "contexts/firetableContext";
 import { FieldType } from "constants/fields";
@@ -96,7 +95,6 @@ export default function SideDrawer() {
         name: column.key,
         label: column.name,
       };
-
       switch (column.type) {
         case FieldType.longText:
           field.fieldVariant = "long";
@@ -124,7 +122,12 @@ export default function SideDrawer() {
         default:
           break;
       }
+
       field.editable = column.editable;
+      if (cell?.row) {
+        const rowData = tableState.rows[cell.row];
+        field.editable = field.editable && !(rowData._readonly_ ?? false);
+      }
       field.config = column.config;
       return field;
     });

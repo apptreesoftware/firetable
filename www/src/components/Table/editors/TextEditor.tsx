@@ -52,7 +52,7 @@ class TextEditor extends React.Component<
   }
 
   render() {
-    const { classes, column, value } = this.props;
+    const { classes, column, value, rowData } = this.props;
     let inputType = "text";
     switch ((column as any).type) {
       case FieldType.email:
@@ -76,6 +76,7 @@ class TextEditor extends React.Component<
       <TextField
         defaultValue={value}
         type={inputType}
+        disabled={!column.editable || rowData._readonly_}
         fullWidth
         variant="standard"
         inputProps={{ ref: this.inputRef, maxLength: maxLength }}

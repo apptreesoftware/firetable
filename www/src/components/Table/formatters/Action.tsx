@@ -60,7 +60,7 @@ export default function Action({
     ? "redo"
     : "";
   const [isRunning, setIsRunning] = useState(false);
-  const disabled = column.editable === false;
+  const disabled = column.editable === false || row._readonly_;
   const snack = useContext(SnackContext);
 
   const callableName =
