@@ -93,6 +93,8 @@ export default function File({
 
   const dropzoneProps = getRootProps();
 
+  const isReadonly = !column.editable || row._readonly_;
+
   return (
     <Grid
       container
@@ -120,7 +122,7 @@ export default function File({
                     body: "Are you sure you want to delete this file?",
                     confirm: "Delete",
                   }}
-                  functionName={column.editable !== false ? "onDelete" : ""}
+                  functionName={!isReadonly ? "onDelete" : ""}
                   stopPropagation
                 >
                   <Chip
@@ -131,9 +133,7 @@ export default function File({
                       e.stopPropagation();
                     }}
                     onDelete={
-                      column.editable !== false
-                        ? () => handleDelete(file.ref)
-                        : undefined
+                      !isReadonly ? () => handleDelete(file.ref) : undefined
                     }
                     className={classes.chip}
                   />
@@ -145,7 +145,7 @@ export default function File({
 
       <Grid item className={classes.endButtonContainer}>
         {!isLoading ? (
-          column.editable !== false && (
+          !isReadonly && (
             <IconButton
               size="small"
               className="row-hover-iconButton"

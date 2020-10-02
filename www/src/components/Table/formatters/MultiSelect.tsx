@@ -54,6 +54,7 @@ export default function MultiSelect({
   column,
   value,
   onSubmit,
+  row,
 }: CustomCellProps) {
   const classes = useStyles();
 
@@ -123,7 +124,7 @@ export default function MultiSelect({
           label={column.name}
           labelPlural={column.name}
           options={config.options ?? []}
-          disabled={column.editable === false}
+          disabled={column.editable === false || row._readonly_}
           onOpen={handleOpen}
           TextFieldProps={
             {

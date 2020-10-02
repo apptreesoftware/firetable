@@ -48,7 +48,7 @@ export default function Checkbox({
     <Switch
       checked={!!value}
       onChange={() => onSubmit(!value)}
-      disabled={!column.editable}
+      disabled={!column.editable || row._readonly_}
       classes={
         {
           // checked: classes.switchChecked,

@@ -1,15 +1,13 @@
-import React, { lazy, Suspense, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 
 import _orderBy from "lodash/orderBy";
 import { useDebouncedCallback } from "use-debounce";
-import _isEmpty from "lodash/isEmpty";
-
-import { useTheme, Grid, CircularProgress } from "@material-ui/core";
+import { CircularProgress, Grid, useTheme } from "@material-ui/core";
 
 import "react-data-grid/dist/react-data-grid.css";
 import DataGrid, {
-  Column,
   CellNavigationMode,
+  Column,
   ScrollPosition,
 } from "react-data-grid";
 import { DraggableHeader } from "react-data-grid-addons";
