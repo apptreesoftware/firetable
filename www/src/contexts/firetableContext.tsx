@@ -102,7 +102,6 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
   const { currentUser, userDoc } = useAppContext();
   useEffect(() => {
     const { tables } = settings;
-    const team = userDoc.state?.doc?.domain;
 
     if (tables && userRoles && !sections) {
       if (userRoles.includes("FIRETABLE_ADMIN")) {
@@ -114,23 +113,24 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
         setSections(_sections);
         setTables(filteredTables);
       } else {
-        db.collection("apps")
-          .where("team", "==", team)
-          .get()
-          .then((projects) => {
-            const projectIds = projects.docs.map((p) => p.id);
-            const filteredTables = _sortBy(tables, "name")
-              .filter((table) => projectIds.includes(table.section))
-              .map((table) => ({
-                ...table,
-                section: table.section
-                  ? table.section.toUpperCase().trim()
-                  : "OTHER",
-              }));
-            const _sections = _groupBy(filteredTables, "section");
-            setSections(_sections);
-            setTables(filteredTables);
+        const allowedTables = userRoles
+          .filter((r) => r.startsWith("DATA:"))
+          .map((r) => {
+            return r.substr("DATA:".length);
           });
+        const filteredTables = _sortBy(tables, "name")
+          .filter((table) => {
+            return allowedTables.includes(table.collection);
+          })
+          .map((table) => ({
+            ...table,
+            section: table.section
+              ? table.section.toUpperCase().trim()
+              : "OTHER",
+          }));
+        const _sections = _groupBy(filteredTables, "section");
+        setSections(_sections);
+        setTables(filteredTables);
       }
     }
   }, [settings, userRoles, sections, userDoc]);
