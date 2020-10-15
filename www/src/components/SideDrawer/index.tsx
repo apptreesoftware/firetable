@@ -58,6 +58,11 @@ export default function SideDrawer() {
   }, [urlDocState]);
 
   useEffect(() => {
+    setOpen(false);
+    dispatchUrlDoc({ path: "", doc: null });
+  }, [window.location.pathname]);
+
+  useEffect(() => {
     const rowRef = queryString.parse(window.location.search).rowRef as string;
     if (rowRef) {
       console.log(rowRef);
@@ -67,13 +72,13 @@ export default function SideDrawer() {
 
   useEffect(() => {
     if (cell) {
-      // window.history.pushState(
-      //   "",
-      //   `${tableState?.tablePath}`,
-      //   `${window.location.pathname}?rowRef=${encodeURIComponent(
-      //     tableState?.rows[cell.row].ref.path
-      //   )}`
-      // );
+      window.history.pushState(
+        "",
+        `${tableState?.tablePath}`,
+        `${window.location.pathname}?rowRef=${encodeURIComponent(
+          tableState?.rows[cell.row].ref.path
+        )}`
+      );
       console.log(tableState?.tablePath, tableState?.rows[cell.row].id);
       if (urlDocState.doc) {
         urlDocState.unsubscribe();
