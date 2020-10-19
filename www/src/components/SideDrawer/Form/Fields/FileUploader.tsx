@@ -131,29 +131,31 @@ export function ControlledFileUploader({
 
       <Grid container spacing={1} className={classes.chipList}>
         {Array.isArray(value) &&
-          value.map((file: FileValue, i) => (
-            <Grid item key={file.name} className={classes.chipGridItem}>
-              <Confirmation
-                message={{
-                  title: "Delete File",
-                  body: "Are you sure you want to delete this file?",
-                  confirm: "Delete",
-                }}
-                functionName={editable !== false ? "onDelete" : ""}
-              >
-                <Chip
-                  size="medium"
-                  icon={<FileIcon />}
-                  label={file.name}
-                  onClick={() => window.open(file.downloadURL)}
-                  onDelete={
-                    editable !== false ? () => handleDelete(i) : undefined
-                  }
-                  className={classes.chip}
-                />
-              </Confirmation>
-            </Grid>
-          ))}
+          value
+            .filter((f) => f.name?.length > 0 && f.downloadURL?.length > 0)
+            .map((file: FileValue, i) => (
+              <Grid item key={file.name} className={classes.chipGridItem}>
+                <Confirmation
+                  message={{
+                    title: "Delete File",
+                    body: "Are you sure you want to delete this file?",
+                    confirm: "Delete",
+                  }}
+                  functionName={editable !== false ? "onDelete" : ""}
+                >
+                  <Chip
+                    size="medium"
+                    icon={<FileIcon />}
+                    label={file.name}
+                    onClick={() => window.open(file.downloadURL)}
+                    onDelete={
+                      editable !== false ? () => handleDelete(i) : undefined
+                    }
+                    className={classes.chip}
+                  />
+                </Confirmation>
+              </Grid>
+            ))}
 
         {localFile && (
           <Grid item className={classes.chipGridItem}>

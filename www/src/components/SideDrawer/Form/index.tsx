@@ -11,6 +11,7 @@ import FieldWrapper from "./FieldWrapper";
 import { useAppContext } from "contexts/appContext";
 import { useFiretableContext } from "contexts/firetableContext";
 import Text from "./Fields/Text";
+import useIsAdmin from "hooks/useIsAdmin";
 const Url = lazy(
   () => import("./Fields/Url" /* webpackChunkName: "SideDrawer-Url" */)
 );
@@ -115,7 +116,7 @@ export default function Form({ fields, values }: IFormProps) {
   const initialValues = getInitialValues(fields);
   const { ref: docRef, ...rowValues } = values;
   const defaultValues = { ...initialValues, ...rowValues };
-
+  const isAdmin = useIsAdmin();
   const { tableState } = useFiretableContext();
   const { userDoc } = useAppContext();
   const userDocHiddenFields =
@@ -290,12 +291,14 @@ export default function Form({ fields, values }: IFormProps) {
             );
           })}
 
-        <FieldWrapper
-          type="debug"
-          name="_ft_debug_path"
-          label="Document Path"
-          debugText={values.ref?.path ?? values.id ?? "No ref"}
-        />
+        {isAdmin && (
+          <FieldWrapper
+            type="debug"
+            name="_ft_debug_path"
+            label="Document Path"
+            debugText={values.ref?.path ?? values.id ?? "No ref"}
+          />
+        )}
       </Grid>
     </form>
   );

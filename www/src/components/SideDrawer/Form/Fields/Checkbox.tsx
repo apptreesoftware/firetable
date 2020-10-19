@@ -68,14 +68,17 @@ export default function Checkbox({
         const handleClick = () => onChange(!value);
 
         return (
-          <ButtonBase className={classes.buttonBase} onClick={handleClick}>
+          <ButtonBase
+            className={classes.buttonBase}
+            onClick={editable ? handleClick : undefined}
+          >
             <FormControlLabel
               control={
                 <Switch
                   color="secondary"
                   {...props}
                   checked={value}
-                  onChange={handleChange}
+                  onChange={editable ? handleChange : undefined}
                   onBlur={onBlur}
                   disabled={editable === false}
                 />

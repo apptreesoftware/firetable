@@ -46,6 +46,7 @@ export default function ConnectService({
                 row={control.defaultValuesRef.current}
                 multiple={false}
                 onChange={onChange}
+                editable={editable}
                 docRef={docRef}
                 TextFieldProps={{
                   fullWidth: true,

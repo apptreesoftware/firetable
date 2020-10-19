@@ -20,6 +20,7 @@ export default function DatePicker({
   control,
   docRef,
   name,
+  editable,
   ...props
 }: IDatePickerProps) {
   const theme = useTheme();
@@ -45,6 +46,7 @@ export default function DatePicker({
               inputVariant="filled"
               fullWidth
               margin="none"
+              disabled={!editable}
               format={DATE_FORMAT}
               placeholder={DATE_FORMAT}
               InputAdornmentProps={{

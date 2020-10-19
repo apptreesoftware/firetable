@@ -102,6 +102,7 @@ export default function ConnectService({
           classes: { root: classes.fullHeight },
         },
         SelectProps: {
+          disabled: disabled,
           onClose,
           classes: {
             root: clsx(classes.fullHeight, classes.select),
