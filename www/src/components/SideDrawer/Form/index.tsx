@@ -161,7 +161,7 @@ export default function Form({ fields, values }: IFormProps) {
             // Call the field function with values if necessary
             // Otherwise, just use the field object
             const field: Field = _isFunction(_field) ? _field(values) : _field;
-            field.editable = !values._readonly_;
+            field.editable = field.editable && values._readonly_ !== true;
             const { type, ...fieldProps } = field;
             let _type = type;
 
