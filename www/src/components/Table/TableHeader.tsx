@@ -82,6 +82,8 @@ export default function TableHeader({
 
   const needsMigration = Array.isArray(columns) && columns.length !== 0;
   const tempColumns = needsMigration ? columns : Object.values(columns);
+  const rowAddEnabled =
+    tableState?.config?.tableConfig?.doc?.rowAddEnabled ?? false;
 
   return (
     <Grid
@@ -92,7 +94,7 @@ export default function TableHeader({
       className={classes.root}
     >
       <MigrateButton needsMigration={needsMigration} columns={tempColumns} />
-      {!isCollectionGroup() && (
+      {rowAddEnabled && !isCollectionGroup() && (
         <Grid item>
           <Button
             onClick={() => {

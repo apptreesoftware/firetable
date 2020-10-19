@@ -87,7 +87,6 @@ export const tableSettings = (
         </HelperText>
       ),
   }),
-
   {
     type: FIELDS.multiSelect,
     name: "section",
@@ -109,7 +108,24 @@ export const tableSettings = (
     fieldVariant: "long",
     validation: yup.string(),
   },
-
+  {
+    type: FIELDS.checkbox,
+    name: "rowCopyEnabled",
+    label: "Allow Copy",
+    defaultValue: true,
+  },
+  {
+    type: FIELDS.checkbox,
+    name: "rowDeleteEnabled",
+    label: "Allow Delete",
+    defaultValue: true,
+  },
+  {
+    type: FIELDS.checkbox,
+    name: "rowAddEnabled",
+    label: "Allow Add",
+    defaultValue: true,
+  },
   {
     type: FIELDS.multiSelect,
     name: "roles",

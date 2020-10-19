@@ -34,7 +34,7 @@ export default function TableHeaderActionButton({
       );
     }) ?? [];
 
-  return (
+  return actionMenuItems.length > 0 ? (
     <div>
       <Button
         variant="contained"
@@ -55,5 +55,7 @@ export default function TableHeaderActionButton({
         {actionMenuItems}
       </Menu>
     </div>
+  ) : (
+    <></>
   );
 }

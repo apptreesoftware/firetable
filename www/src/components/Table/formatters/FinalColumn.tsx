@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { FormatterProps } from "react-data-grid";
-
 import {
   makeStyles,
   createStyles,
@@ -45,9 +44,13 @@ export const useFinalColumnStyles = makeStyles((theme) =>
 
 export default function FinalColumn({ row }: FormatterProps<any, any, any>) {
   const { requestConfirmation } = useConfirmation();
-  const { tableActions } = useFiretableContext();
+  const { tableActions, tableState } = useFiretableContext();
   const shiftPress = useKeyPress("Shift");
   const snack = useContext(SnackContext);
+  const rowCopyEnabled =
+    tableState?.config?.tableConfig?.doc?.rowCopyEnabled ?? false;
+  const rowDeleteEnabled =
+    tableState?.config?.tableConfig?.doc?.rowDeleteEnabled ?? false;
 
   const handleDelete = async () => {
     row.ref.delete().then(
@@ -68,73 +71,77 @@ export default function FinalColumn({ row }: FormatterProps<any, any, any>) {
   };
   return (
     <Grid container spacing={1}>
-      <Grid item>
-        <Tooltip title="Duplicate row">
-          <IconButton
-            size="small"
-            color="inherit"
-            onClick={() => {
-              const clonedRow = { ...row };
-              // remove metadata
-              delete clonedRow.ref;
-              delete clonedRow.rowHeight;
-              delete clonedRow._ft_updatedAt;
-              delete clonedRow._ft_updatedBy;
-              delete clonedRow._ft_createdAt;
-              Object.keys(clonedRow).forEach((key) => {
-                if (clonedRow[key] === undefined) {
-                  delete clonedRow[key];
-                }
-              });
-              if (tableActions) tableActions?.row.add(clonedRow);
-            }}
-            aria-label="Duplicate row"
-          >
-            <CopyCellsIcon />
-          </IconButton>
-        </Tooltip>
-      </Grid>
+      {rowCopyEnabled && (
+        <Grid item>
+          <Tooltip title="Duplicate row">
+            <IconButton
+              size="small"
+              color="inherit"
+              onClick={() => {
+                const clonedRow = { ...row };
+                // remove metadata
+                delete clonedRow.ref;
+                delete clonedRow.rowHeight;
+                delete clonedRow._ft_updatedAt;
+                delete clonedRow._ft_updatedBy;
+                delete clonedRow._ft_createdAt;
+                Object.keys(clonedRow).forEach((key) => {
+                  if (clonedRow[key] === undefined) {
+                    delete clonedRow[key];
+                  }
+                });
+                if (tableActions) tableActions?.row.add(clonedRow);
+              }}
+              aria-label="Duplicate row"
+            >
+              <CopyCellsIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+      )}
 
-      <Grid item>
-        <Tooltip title="Delete row">
-          <>
-            {shiftPress ? (
-              <IconButton
-                size="small"
-                color="inherit"
-                onClick={handleDelete}
-                aria-label="Delete row"
-              >
-                <DeleteIcon />
-              </IconButton>
-            ) : (
-              // <Confirmation
-              //   message={{
-              //     title: "Delete Row",
-              //     body: "Are you sure you want to delete this row?",
-              //     confirm: "Delete",
-              //   }}
-              // >
-              <IconButton
-                size="small"
-                color="inherit"
-                onClick={() => {
-                  requestConfirmation({
-                    title: "Delete Row",
-                    body: "Are you sure you want to delete this row?",
-                    confirm: "Delete",
-                    handleConfirm: handleDelete,
-                  });
-                }}
-                aria-label="Delete row"
-              >
-                <DeleteIcon />
-              </IconButton>
-              // </Confirmation>
-            )}
-          </>
-        </Tooltip>
-      </Grid>
+      {rowDeleteEnabled && (
+        <Grid item>
+          <Tooltip title="Delete row">
+            <>
+              {shiftPress ? (
+                <IconButton
+                  size="small"
+                  color="inherit"
+                  onClick={handleDelete}
+                  aria-label="Delete row"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              ) : (
+                // <Confirmation
+                //   message={{
+                //     title: "Delete Row",
+                //     body: "Are you sure you want to delete this row?",
+                //     confirm: "Delete",
+                //   }}
+                // >
+                <IconButton
+                  size="small"
+                  color="inherit"
+                  onClick={() => {
+                    requestConfirmation({
+                      title: "Delete Row",
+                      body: "Are you sure you want to delete this row?",
+                      confirm: "Delete",
+                      handleConfirm: handleDelete,
+                    });
+                  }}
+                  aria-label="Delete row"
+                >
+                  <DeleteIcon />
+                </IconButton>
+                // </Confirmation>
+              )}
+            </>
+          </Tooltip>
+        </Grid>
+      )}
     </Grid>
   );
 }
