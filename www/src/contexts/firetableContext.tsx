@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, useRef, useMemo } from "react";
 import _groupBy from "lodash/groupBy";
 import _sortBy from "lodash/sortBy";
+import _isEqual from "lodash/isEqual";
 import { DataGridHandle } from "react-data-grid";
 import firebase from "firebase/app";
 import useFiretable, {
@@ -96,10 +97,14 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
   const [userRoles, setUserRoles] = useState<null | string[]>();
   const [userClaims, setUserClaims] = useState<any>();
 
-  const { currentUser } = useAppContext();
+  const { currentUser, userDoc } = useAppContext();
+
+  const prevClaimDate = useRef(0);
+
   useEffect(() => {
     const { tables } = settings;
     if (tables && userRoles && !sections) {
+      console.log("Reloading sections");
       const filteredTables = _sortBy(tables, "name")
         .filter((table) => {
           const tableInfo = table.collection.split(":");
@@ -135,13 +140,29 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
   );
 
   useEffect(() => {
-    if (currentUser && !userClaims) {
+    if (
+      currentUser &&
+      (!userClaims ||
+        (userDoc?.state?.doc?.claimsDate ?? 0) > prevClaimDate.current)
+    ) {
+      if (userDoc.state?.doc) {
+        prevClaimDate.current = userDoc.state.doc.claimsDate;
+      }
+
       currentUser.getIdTokenResult(true).then((results) => {
+        const needsTableRefresh =
+          !_isEqual(userRoles, results.claims.roles) && sections;
         setUserRoles(results.claims.roles || []);
         setUserClaims(results.claims);
+        if (needsTableRefresh) {
+          setSections(undefined);
+          if (window.location.pathname.startsWith("/table/")) {
+            window.location.replace("/"); //If they are on a table, navigate them back to the root
+          }
+        }
       });
     }
-  }, [currentUser]);
+  }, [currentUser, userDoc.state]);
 
   const updateCell = (
     ref: firebase.firestore.DocumentReference,
