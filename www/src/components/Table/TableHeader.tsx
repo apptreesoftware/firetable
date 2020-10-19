@@ -172,11 +172,9 @@ export default function TableHeader({
           <ImportCSV />
         </Grid>
       )}
-      {isAdmin && (
-        <Grid item>
-          <ExportCSV />
-        </Grid>
-      )}
+      <Grid item>
+        <ExportCSV />
+      </Grid>
 
       <Grid item>
         <TableHeaderActionButton
