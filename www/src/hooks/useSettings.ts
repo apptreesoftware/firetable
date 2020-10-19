@@ -33,11 +33,6 @@ const useSettings = () => {
     // updates the setting doc
 
     const schemaToCopy = data.copySchema;
-    delete data["copySchema"];
-
-    if (data.section) {
-      data.collection = `${data.section}_${data.collection}`;
-    }
 
     db.doc("_FIRETABLE_/settings").set(
       { tables: tables ? [...tables, data] : [data] },
@@ -54,6 +49,17 @@ const useSettings = () => {
           db.collection("_FIRETABLE_/settings/schema")
             .doc(data.collection)
             .set(schemaData, { merge: true });
+
+          const actionsSnapshot = db
+            .collection(`_FIRETABLE_/settings/schema/${schemaToCopy}/actions`)
+            .get()
+            .then((s) => {
+              s.docs.forEach((actionDoc) => {
+                db.doc(
+                  `_FIRETABLE_/settings/schema/${data.collection}/actions/${actionDoc.id}`
+                ).set(actionDoc.data(), { merge: true });
+              });
+            });
         });
     } else {
       //create the firetable collection doc with empty columns

@@ -1,7 +1,7 @@
+import { inspect } from "util";
 import useTable from "./useTable";
 import useTableConfig from "./useTableConfig";
-import { TableAction } from "../../components/TableSettingsDialog";
-import { db } from "../../firebase";
+import { db, functions } from "../../firebase";
 
 export type FiretableActions = {
   // TODO: Stricter types here
@@ -22,6 +22,12 @@ export type FiretableActions = {
     performAction: Function;
   };
 };
+
+export interface TableAction {
+  actionName: string;
+  action: string;
+  includeTableData?: boolean;
+}
 
 export type FiretableState = {
   orderBy: FiretableOrderBy;
@@ -62,22 +68,13 @@ const useFiretable = (
   };
 
   const performTableAction = async (tableAction: TableAction) => {
-    console.log(`Perform action :${JSON.stringify(tableAction)}`);
+    console.log(inspect(tableState));
     try {
-      const uri = new URL(tableAction.webhookUrl);
-      const snapshot = await db.collection(tablePath(tableState.path)).get();
-      await fetch(uri.toString(), {
-        method: "POST",
-        body: JSON.stringify({
-          rows: snapshot.docs.map((d) => {
-            return {
-              _id: d.id,
-              ...d.data(),
-            };
-          }),
-          collectionName: tableState.path,
-        }),
-        headers: { "content-type": "application/json" },
+      const callable = functions.httpsCallable("performFiretableBulkAction");
+      await callable({
+        tableId: tableState.path,
+        actionId: tableAction.action,
+        includeTableData: tableAction.includeTableData ?? false,
       });
     } catch (e) {
       console.error(e);

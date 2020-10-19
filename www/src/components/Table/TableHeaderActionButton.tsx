@@ -2,8 +2,8 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { TableAction } from "../TableSettingsDialog";
 import { ArrowDropDown } from "@material-ui/icons";
+import { TableAction } from "../../hooks/useFiretable";
 
 export default function TableHeaderActionButton({
   tableActions,
@@ -28,7 +28,9 @@ export default function TableHeaderActionButton({
   const actionMenuItems =
     actions?.map((a) => {
       return (
-        <MenuItem onClick={() => handleSelection(a)}>{a.actionName}</MenuItem>
+        <MenuItem key={a.actionName} onClick={() => handleSelection(a)}>
+          {a.actionName}
+        </MenuItem>
       );
     }) ?? [];
 

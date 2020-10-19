@@ -39,24 +39,29 @@ const useDoc = (intialOverrides: any) => {
   });
   const setDocumentListner = () => {
     documentDispatch({ prevPath: documentState.path });
-    const unsubscribe = db.doc(documentState.path).onSnapshot((snapshot) => {
-      if (snapshot.exists) {
-        const data = snapshot.data();
-        const id = snapshot.id;
-        const ref = snapshot.ref;
-        const doc = { ...data, id, ref };
-        console.log(`DispatchDoc: ${documentState.path}`);
-        documentDispatch({
-          doc,
-          ref,
-          loading: false,
-        });
-      } else {
-        documentDispatch({
-          loading: false,
-        });
+    const unsubscribe = db.doc(documentState.path).onSnapshot(
+      (snapshot) => {
+        if (snapshot.exists) {
+          const data = snapshot.data();
+          const id = snapshot.id;
+          const ref = snapshot.ref;
+          const doc = { ...data, id, ref };
+          console.log(`DispatchDoc: ${documentState.path}`);
+          documentDispatch({
+            doc,
+            ref,
+            loading: false,
+          });
+        } else {
+          documentDispatch({
+            loading: false,
+          });
+        }
+      },
+      (err) => {
+        console.log("Unable to fetch table settings", err);
       }
-    });
+    );
     documentDispatch({ unsubscribe });
   };
   useEffect(() => {

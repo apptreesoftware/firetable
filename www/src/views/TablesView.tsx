@@ -28,9 +28,9 @@ import { useFiretableContext } from "contexts/firetableContext";
 import { useAppContext } from "contexts/appContext";
 import { DocActions } from "hooks/useDoc";
 import TableSettingsDialog, {
-  TableAction,
   TableSettingsDialogModes,
 } from "components/TableSettings";
+import { TableAction } from "../hooks/useFiretable";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

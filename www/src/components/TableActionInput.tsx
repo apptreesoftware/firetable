@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { TableAction } from "./TableSettingsDialog";
 import { Button, TextField } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import AddIcon from "@material-ui/icons/AddCircle";
 import IconButton from "@material-ui/core/IconButton";
 import { RemoveCircle } from "@material-ui/icons";
+import { TableAction } from "../hooks/useFiretable";
 
 const useStyles = makeStyles((Theme) =>
   createStyles({
@@ -38,15 +38,15 @@ const TableActionsInput = ({
   const [actions, setActions] = useState(value ?? []);
   const [newAction, setNewAction] = useState({
     actionName: "",
-    webhookUrl: "",
+    action: "",
   });
 
   const handleAdd = () => {
     // setOptions([...options, newOption]);
-    if (newAction.webhookUrl && newAction.actionName) {
+    if (newAction.action && newAction.actionName) {
       const updatedActions = [...actions, newAction];
       handleChange(updatedActions);
-      setNewAction({ actionName: "", webhookUrl: "" });
+      setNewAction({ actionName: "", action: "" });
       setActions(updatedActions);
     }
   };
@@ -76,7 +76,6 @@ const TableActionsInput = ({
             id="actionName"
             variant="filled"
             onChange={(e) => {
-              console.log(`TextField onChange: ${e.target.value}`);
               newAction.actionName = e.target.value;
               setNewAction(newAction);
             }}
@@ -85,14 +84,13 @@ const TableActionsInput = ({
         <Grid item xs>
           <TextField
             fullWidth
-            value={action.webhookUrl}
+            value={action.action}
             disabled={true}
-            label="Webhook"
-            id="actionWebhook"
+            label="Action"
+            id="actionId"
             variant="filled"
             onChange={(e) => {
-              console.log(`TextField onChange: ${e.target.value}`);
-              newAction.webhookUrl = e.target.value;
+              newAction.action = e.target.value;
               setNewAction(newAction);
             }}
           />
@@ -122,10 +120,9 @@ const TableActionsInput = ({
             variant="filled"
             value={newAction.actionName}
             onChange={(e) => {
-              console.log(`TextField onChange: ${e.target.value}`);
               setNewAction({
                 actionName: e.target.value,
-                webhookUrl: newAction.webhookUrl,
+                action: newAction.action,
               });
             }}
           />
@@ -133,15 +130,15 @@ const TableActionsInput = ({
         <Grid item xs>
           <TextField
             fullWidth
-            label="Webhook"
-            id="webhook"
+            label="Action"
+            id="action"
             variant="filled"
-            value={newAction.webhookUrl}
+            value={newAction.action}
             onChange={(e) => {
               console.log(`TextField onChange: ${e.target.value}`);
               setNewAction({
                 actionName: newAction.actionName,
-                webhookUrl: e.target.value,
+                action: e.target.value,
               });
             }}
           />

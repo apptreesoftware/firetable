@@ -131,7 +131,7 @@ export default function SideDrawer() {
       field.editable = column.editable;
       if (cell?.row) {
         const rowData = tableState.rows[cell.row];
-        field.editable = field.editable && !(rowData._readonly_ ?? false);
+        field.editable = field.editable && !(rowData?._readonly_ ?? false);
       }
       field.config = column.config;
       return field;

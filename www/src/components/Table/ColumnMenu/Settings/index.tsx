@@ -77,12 +77,12 @@ const ConfigFields = ({
       return (
         <>
           <TextField
-            label="Webservice Url"
-            name="url"
-            value={config.url}
+            label="Action"
+            name="action"
+            value={config.action}
             fullWidth
             onChange={(e) => {
-              handleChange("url")(e.target.value);
+              handleChange("action")(e.target.value);
             }}
           />
           <TextField

@@ -27,6 +27,7 @@ export interface IConnectServiceSelectProps {
     resultsKey: string;
     [key: string]: any;
   };
+  collectionName: string;
   editable?: boolean;
   /** Optional style overrides for root MUI `TextField` component */
   className?: string;
@@ -44,13 +45,18 @@ export default function ConnectServiceSelect({
   editable,
   ...props
 }: IConnectServiceSelectProps) {
-  const url = config.url;
+  const url = config.action;
   const titleKey = config.titleKey ?? config.primaryKey;
   const resultsKey = config.resultsKey;
   const primaryKey = config.primaryKey;
 
   const row = Object.assign({}, props.row, { ref: undefined });
-  const [searchState, searchDispatch] = useConnectService(url, row, resultsKey);
+  const [searchState, searchDispatch] = useConnectService({
+    tableId: props.collectionName,
+    action: config.action,
+    resultsKey: config.resultsKey,
+    rowData: row,
+  });
 
   const options = searchState.results.map((hit) => ({
     label: _get(hit, titleKey) ?? _get(hit, primaryKey),

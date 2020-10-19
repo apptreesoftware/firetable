@@ -55,9 +55,11 @@ export default function ConnectService({
   value,
   onSubmit,
   row,
+  docRef,
 }: CustomCellProps) {
   const classes = useStyles();
 
+  console.log(`Parent: ${docRef.parent.id}`);
   const { config } = column as any;
   const { dataGridRef } = useFiretableContext();
   if (!config || !config.primaryKey) return <></>;
@@ -89,6 +91,7 @@ export default function ConnectService({
       value={value}
       onChange={onSubmit}
       config={config}
+      collectionName={docRef.parent.id}
       editable={column.editable as boolean}
       TextFieldProps={{
         fullWidth: true,

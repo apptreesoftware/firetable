@@ -27,7 +27,6 @@ export default function ConnectService({
   }
 
   const displayKey = config.titleKey ?? config.primaryKey;
-
   return (
     <Controller
       control={control}
@@ -43,6 +42,7 @@ export default function ConnectService({
               <ConnectServiceSelect
                 {...(props as any)}
                 value={value}
+                collectionName={docRef.parent.id}
                 row={control.defaultValuesRef.current}
                 multiple={false}
                 onChange={onChange}

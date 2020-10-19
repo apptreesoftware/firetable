@@ -12,8 +12,6 @@ import { useAppContext } from "./appContext";
 import { useSnackContext } from "./snackContext";
 import { SideDrawerRef } from "components/SideDrawer";
 import { ColumnMenuRef } from "components/Table/ColumnMenu";
-import useDoc from "../hooks/useDoc";
-import { db } from "../firebase";
 
 export type Table = {
   collection: string;
@@ -42,7 +40,6 @@ interface FiretableContextProps {
       description: string;
       roles: string[];
       section: string;
-      copySchema: string;
     }) => void;
     updateTable: (data: {
       collection: string;
@@ -99,41 +96,33 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
   const [userRoles, setUserRoles] = useState<null | string[]>();
   const [userClaims, setUserClaims] = useState<any>();
 
-  const { currentUser, userDoc } = useAppContext();
+  const { currentUser } = useAppContext();
   useEffect(() => {
     const { tables } = settings;
-
     if (tables && userRoles && !sections) {
-      if (userRoles.includes("FIRETABLE_ADMIN")) {
-        const filteredTables = _sortBy(tables, "name").map((table) => ({
+      const filteredTables = _sortBy(tables, "name")
+        .filter((table) => {
+          const tableInfo = table.collection.split(":");
+          let project = "";
+          if (tableInfo.length === 2) {
+            project = tableInfo[0];
+          }
+          return (
+            !table.roles ||
+            table.roles.some((role) => userRoles.includes(role)) ||
+            userRoles.includes(project)
+          );
+        })
+        .map((table) => ({
           ...table,
           section: table.section ? table.section.toUpperCase().trim() : "OTHER",
         }));
-        const _sections = _groupBy(filteredTables, "section");
-        setSections(_sections);
-        setTables(filteredTables);
-      } else {
-        const allowedTables = userRoles
-          .filter((r) => r.startsWith("DATA:"))
-          .map((r) => {
-            return r.substr("DATA:".length);
-          });
-        const filteredTables = _sortBy(tables, "name")
-          .filter((table) => {
-            return allowedTables.includes(table.collection);
-          })
-          .map((table) => ({
-            ...table,
-            section: table.section
-              ? table.section.toUpperCase().trim()
-              : "OTHER",
-          }));
-        const _sections = _groupBy(filteredTables, "section");
-        setSections(_sections);
-        setTables(filteredTables);
-      }
+
+      const _sections = _groupBy(filteredTables, "section");
+      setSections(_sections);
+      setTables(filteredTables);
     }
-  }, [settings, userRoles, sections, userDoc]);
+  }, [settings, userRoles, sections]);
 
   const roles = useMemo(
     () =>

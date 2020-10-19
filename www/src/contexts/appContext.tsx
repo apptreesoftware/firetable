@@ -67,7 +67,7 @@ export const AppProvider: React.FC<IAppProviderProps> = ({
 
   useEffect(() => {
     if (currentUser) {
-      dispatchUserDoc({ path: `users/${currentUser.uid}` });
+      dispatchUserDoc({ path: `_FT_USERS/${currentUser.uid}` });
     }
   }, [currentUser]);
 
