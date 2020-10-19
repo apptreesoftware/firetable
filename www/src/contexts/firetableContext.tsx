@@ -26,6 +26,7 @@ export type Table = {
 interface FiretableContextProps {
   tables: Table[];
   roles: string[];
+  userRoles: string[];
   sections: { [sectionName: string]: Table[] };
   tableState: FiretableState;
   tableActions: FiretableActions;
@@ -219,6 +220,7 @@ export const FiretableContextProvider: React.FC = ({ children }) => {
         dataGridRef,
         sideDrawerRef,
         columnMenuRef,
+        userRoles: userRoles ?? undefined,
       }}
     >
       {children}

@@ -23,11 +23,12 @@ const initializeApp = (serviceAccountFile) => {
 
 module.exports.setUserRoles = (serviceAccountFile) => async (email, roles) => {
   try {
-    const { auth } = initializeApp(serviceAccountFile);
+    const { auth, db } = initializeApp(serviceAccountFile);
     // Initialize Auth
     // sets the custom claims on an account to the claims object provided
     const user = await auth.getUserByEmail(email);
     await auth.setCustomUserClaims(user.uid, { ...user.customClaims, roles });
+    await db.doc(`_FT_USERS/${user.uid}`).update({ claimsDate: Date.now() });
     return {
       success: true,
       message: `\n✅ ${chalk.bold(email)} has the roles: ${chalk.bold(

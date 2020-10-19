@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   makeStyles,
@@ -23,6 +23,7 @@ import FiretableLogo from "assets/Firetable";
 
 import { useFiretableContext } from "contexts/firetableContext";
 import useRouter from "hooks/useRouter";
+import useIsAdmin from "hooks/useIsAdmin";
 
 export const NAV_DRAWER_WIDTH = 300;
 
@@ -87,6 +88,7 @@ export default function NavDrawer({
   const classes = useStyles();
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("sm"));
+  const isAdmin = useIsAdmin();
 
   const { sections } = useFiretableContext();
   const { location } = useRouter();
@@ -147,21 +149,23 @@ export default function NavDrawer({
               </li>
             ))}
 
-          <li className={classes.createTable}>
-            <ListItem
-              button
-              onClick={handleCreateTable}
-              classes={{ root: classes.listItem }}
-            >
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Create Table"
-                classes={{ primary: classes.listItemText }}
-              />
-            </ListItem>
-          </li>
+          {isAdmin && (
+            <li className={classes.createTable}>
+              <ListItem
+                button
+                onClick={handleCreateTable}
+                classes={{ root: classes.listItem }}
+              >
+                <ListItemIcon>
+                  <AddIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Create Table"
+                  classes={{ primary: classes.listItemText }}
+                />
+              </ListItem>
+            </li>
+          )}
         </List>
       </nav>
     </Drawer>

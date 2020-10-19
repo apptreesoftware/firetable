@@ -24,6 +24,7 @@ import MigrateButton from "./MigrateButton";
 import HiddenFields from "./HidenFields";
 import TableHeaderActionButton from "./TableHeaderActionButton";
 import { useSnackContext } from "../../contexts/snackContext";
+import useIsAdmin from "hooks/useIsAdmin";
 export const TABLE_HEADER_HEIGHT = 56;
 
 const useStyles = makeStyles((theme) =>
@@ -75,6 +76,7 @@ export default function TableHeader({
   const classes = useStyles();
   const { tableActions, tableState } = useFiretableContext();
   const snack = useSnackContext();
+  const isAdmin = useIsAdmin();
   if (!tableState || !tableState.columns) return <></>;
   const { columns } = tableState;
 
@@ -163,14 +165,17 @@ export default function TableHeader({
 
       <Grid item />
 
-      {!isCollectionGroup() && (
+      {isAdmin && !isCollectionGroup() && (
         <Grid item>
           <ImportCSV />
         </Grid>
       )}
-      <Grid item>
-        <ExportCSV />
-      </Grid>
+      {isAdmin && (
+        <Grid item>
+          <ExportCSV />
+        </Grid>
+      )}
+
       <Grid item>
         <TableHeaderActionButton
           tableActions={tableState.tableActions}

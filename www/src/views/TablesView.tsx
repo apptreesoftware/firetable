@@ -31,6 +31,7 @@ import TableSettingsDialog, {
   TableSettingsDialogModes,
 } from "components/TableSettings";
 import { TableAction } from "../hooks/useFiretable";
+import useIsAdmin from "hooks/useIsAdmin";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -125,6 +126,7 @@ const TablesView = () => {
     });
 
   const [open, setOpen] = useState(false);
+  const isAdmin = useIsAdmin();
 
   const TableCard = ({ table }) => {
     const checked = Boolean(_find(favs, table));
@@ -161,18 +163,20 @@ const TablesView = () => {
             label: "Open",
           }}
           secondaryAction={
-            <IconButton
-              onClick={() =>
-                setSettingsDialogState({
-                  mode: TableSettingsDialogModes.update,
-                  data: table,
-                })
-              }
-              aria-label="Edit table"
-              className={classes.editButton}
-            >
-              <EditIcon />
-            </IconButton>
+            isAdmin && (
+              <IconButton
+                onClick={() =>
+                  setSettingsDialogState({
+                    mode: TableSettingsDialogModes.update,
+                    data: table,
+                  })
+                }
+                aria-label="Edit table"
+                className={classes.editButton}
+              >
+                <EditIcon />
+              </IconButton>
+            )
           }
         />
       </Grid>
@@ -241,16 +245,18 @@ const TablesView = () => {
             ))}
 
           <section className={classes.section}>
-            <Tooltip title="Create a table">
-              <Fab
-                className={classes.fab}
-                color="secondary"
-                aria-label="Create table"
-                onClick={handleCreateTable}
-              >
-                <AddIcon />
-              </Fab>
-            </Tooltip>
+            {isAdmin && (
+              <Tooltip title="Create a table">
+                <Fab
+                  className={classes.fab}
+                  color="secondary"
+                  aria-label="Create table"
+                  onClick={handleCreateTable}
+                >
+                  <AddIcon />
+                </Fab>
+              </Tooltip>
+            )}
           </section>
         </Container>
       </main>
