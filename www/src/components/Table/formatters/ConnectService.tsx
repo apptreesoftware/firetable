@@ -59,7 +59,6 @@ export default function ConnectService({
 }: CustomCellProps) {
   const classes = useStyles();
 
-  console.log(`Parent: ${docRef.parent.id}`);
   const { config } = column as any;
   const { dataGridRef } = useFiretableContext();
   if (!config || !config.primaryKey) return <></>;

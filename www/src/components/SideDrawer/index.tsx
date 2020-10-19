@@ -65,7 +65,6 @@ export default function SideDrawer() {
   useEffect(() => {
     const rowRef = queryString.parse(window.location.search).rowRef as string;
     if (rowRef) {
-      console.log(rowRef);
       dispatchUrlDoc({ path: decodeURIComponent(rowRef) });
     }
   }, []);
@@ -79,7 +78,6 @@ export default function SideDrawer() {
           tableState?.rows[cell.row].ref.path
         )}`
       );
-      console.log(tableState?.tablePath, tableState?.rows[cell.row].id);
       if (urlDocState.doc) {
         urlDocState.unsubscribe();
         dispatchUrlDoc({ path: "", doc: null });
