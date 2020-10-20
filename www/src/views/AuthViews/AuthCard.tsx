@@ -64,7 +64,7 @@ export default function AuthCard({ children, height = 300, loading = false }) {
           className={classes.grid}
           justify="space-between"
         >
-          <img src={logo} className={classes.logo} />
+          {/* <img src={logo} className={classes.logo} /> */}
 
           {children}
         </Grid>

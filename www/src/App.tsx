@@ -25,6 +25,7 @@ import routes from "constants/routes";
 import AuthView from "views/AuthViews/GoogleAuthView";
 import SignOutView from "views/SignOutView";
 import CompleteAuthView from "./views/CompleteAuthView";
+import AppTreeSignIn from "views/AuthViews/AppTreeSignIn";
 
 const ImpersonatorAuthView = lazy(
   () =>
@@ -62,17 +63,22 @@ const App: React.FC = () => {
                     <Route
                       exact
                       path={routes.auth}
+                      render={() => <AppTreeSignIn />}
+                    />
+                    <Route
+                      exact
+                      path={routes.impersonatorAuth}
+                      render={() => <ImpersonatorAuthView />}
+                    />
+                    <Route
+                      exact
+                      path={routes.googleAuth}
                       render={() => <AuthView />}
                     />
                     <Route
                       exact
                       path={routes.completeAuth}
                       render={() => <CompleteAuthView />}
-                    />
-                    <Route
-                      exact
-                      path={routes.impersonatorAuth}
-                      render={() => <ImpersonatorAuthView />}
                     />
                     <Route
                       exact
