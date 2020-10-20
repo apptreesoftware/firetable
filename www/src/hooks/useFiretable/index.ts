@@ -1,7 +1,6 @@
-import { inspect } from "util";
+import { functions } from "../../firebase";
 import useTable from "./useTable";
 import useTableConfig from "./useTableConfig";
-import { db, functions } from "../../firebase";
 
 export type FiretableActions = {
   // TODO: Stricter types here
@@ -68,7 +67,6 @@ const useFiretable = (
   };
 
   const performTableAction = async (tableAction: TableAction) => {
-    console.log(inspect(tableState));
     try {
       const callable = functions.httpsCallable("performFiretableBulkAction");
       await callable({
