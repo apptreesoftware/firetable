@@ -11,6 +11,9 @@ const Duration = lazy(
   () => import("./Duration" /* webpackChunkName: "Duration" */)
 );
 const Rating = lazy(() => import("./Rating" /* webpackChunkName: "Rating" */));
+const Calculated = lazy(
+  () => import("./Calculated" /* webpackChunkName: "Calculated" */)
+);
 const Checkbox = lazy(
   () => import("./Checkbox" /* webpackChunkName: "Checkbox" */)
 );
@@ -65,9 +68,10 @@ export const getFormatter = (column: any, readOnly: boolean = false) => {
 
     case FieldType.rating:
       return withCustomCell(Rating, readOnly);
+    case FieldType.calculated:
+      return withCustomCell(Calculated, readOnly);
     case FieldType.percentage:
       return withCustomCell(Percentage, readOnly);
-
     case FieldType.color:
       return withCustomCell(Color, readOnly);
 

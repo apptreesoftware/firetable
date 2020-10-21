@@ -73,6 +73,26 @@ const ConfigFields = ({
           </Grid>
         </>
       );
+    case FieldType.calculated:
+      return (
+        <>
+          <Typography variant="overline">
+            {
+              "Equations take the form (attributeName1 * attributeName2)/attributeName3"
+            }
+          </Typography>
+          <TextField
+            label="Equation"
+            name="equation"
+            placeholder="cost * amount"
+            value={config.equation}
+            fullWidth
+            onChange={(e) => {
+              handleChange("equation")(e.target.value);
+            }}
+          />
+        </>
+      );
     case FieldType.connectService:
       return (
         <>

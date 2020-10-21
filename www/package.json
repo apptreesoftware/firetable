@@ -48,7 +48,8 @@
     "use-algolia": "^1.4.1",
     "use-debounce": "^3.3.0",
     "yarn": "^1.19.0",
-    "yup": "^0.27.0"
+    "yup": "^0.27.0",
+    "mathjs": "7.5.1"
   },
   "scripts": {
     "serve": "serve -s build",
@@ -93,7 +94,8 @@
     "firebase-tools": "^8.12.1",
     "husky": "^4.2.5",
     "prettier": "^2.1.1",
-    "pretty-quick": "^3.0.0"
+    "pretty-quick": "^3.0.0",
+    "@types/mathjs": "6.0.6"
   },
   "husky": {
     "hooks": {

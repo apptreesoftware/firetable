@@ -35,6 +35,7 @@ import RichTextIcon from "@material-ui/icons/TextFormat";
 import ActionIcon from "assets/icons/Action";
 import DerivativeIcon from "assets/icons/Derivative";
 import AggregateIcon from "@material-ui/icons/Layers";
+import FunctionsIcon from "@material-ui/icons/Functions";
 
 import ColorIcon from "@material-ui/icons/Colorize";
 import SliderIcon from "assets/icons/Slider";
@@ -108,6 +109,7 @@ export enum FieldType {
   action = "ACTION",
   derivative = "DERIVATIVE",
   aggregate = "AGGREGATE",
+  calculated = "CALCULATED",
 
   color = "COLOR",
   slider = "SLIDER",
@@ -171,6 +173,7 @@ export const FIELDS = [
   { icon: <ActionIcon />, name: "Action", type: FieldType.action },
   { icon: <DerivativeIcon />, name: "Derivative", type: FieldType.derivative },
   { icon: <AggregateIcon />, name: "Aggregate", type: FieldType.aggregate },
+  { icon: <FunctionsIcon />, name: "Calculated", type: FieldType.calculated },
 
   { icon: <ColorIcon />, name: "Color", type: FieldType.color },
   { icon: <SliderIcon />, name: "Slider", type: FieldType.slider },
@@ -228,6 +231,8 @@ export const FIELD_TYPE_DESCRIPTIONS = {
     "Value derived from the rest of the row’s values. Displayed using any other field type. Requires Cloud Function setup.",
   [FieldType.aggregate]:
     "Value aggregated from a specified sub-table of the row. Displayed using any other field type. Requires Cloud Function setup.",
+  [FieldType.calculated]:
+    "Value calculated by a math equation based on other fields in a row.",
 
   [FieldType.color]: "Visual color picker. Supports Hex, RGBA, HSLA.",
   [FieldType.slider]: "Slider with adjustable range. Returns a numeric value.",

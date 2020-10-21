@@ -106,6 +106,12 @@ const Action = lazy(
 const Id = lazy(
   () => import("./Fields/Id" /* webpackChunkName: "SideDrawer-Id" */)
 );
+const Calculated = lazy(
+  () =>
+    import(
+      "./Fields/Calculated" /* webpackChunkName: "SideDrawer-Calculated" */
+    )
+);
 
 export interface IFormProps {
   fields: Fields;
@@ -228,7 +234,6 @@ export default function Form({ fields, values }: IFormProps) {
               case FieldType.rating:
                 fieldComponent = Rating;
                 break;
-
               case FieldType.percentage:
                 fieldComponent = Percentage;
                 break;
@@ -259,6 +264,10 @@ export default function Form({ fields, values }: IFormProps) {
 
               case FieldType.id:
                 fieldComponent = Id;
+                break;
+
+              case FieldType.calculated:
+                fieldComponent = Calculated;
                 break;
 
               case undefined:
