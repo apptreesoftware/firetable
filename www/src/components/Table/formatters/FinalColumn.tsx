@@ -50,7 +50,8 @@ export default function FinalColumn({ row }: FormatterProps<any, any, any>) {
   const rowCopyEnabled =
     tableState?.config?.tableConfig?.doc?.rowCopyEnabled ?? false;
   const rowDeleteEnabled =
-    tableState?.config?.tableConfig?.doc?.rowDeleteEnabled ?? false;
+    (tableState?.config?.tableConfig?.doc?.rowDeleteEnabled ?? false) &&
+    row.delete_disabled !== true;
 
   const handleDelete = async () => {
     row.ref.delete().then(
@@ -100,7 +101,7 @@ export default function FinalColumn({ row }: FormatterProps<any, any, any>) {
         </Grid>
       )}
 
-      {rowDeleteEnabled && (
+      {rowDeleteEnabled && !row._delete_disabled_ === true && (
         <Grid item>
           <Tooltip title="Delete row">
             <>
