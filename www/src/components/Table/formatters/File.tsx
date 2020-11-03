@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import UploadIcon from "assets/icons/Upload";
 
-import Confirmation from "components/Confirmation";
+import { useConfirmation } from "components/ConfirmationDialog";
 import useUploader, { FileValue } from "hooks/useFiretable/useUploader";
 import { FileIcon } from "constants/fields";
 
@@ -61,7 +61,7 @@ export default function File({
 
   const { uploaderState, upload, deleteUpload } = useUploader();
   const { progress, isLoading } = uploaderState;
-
+  const { requestConfirmation } = useConfirmation();
   const onDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
@@ -116,28 +116,26 @@ export default function File({
           {Array.isArray(value) &&
             value.reverse().map((file: FileValue) => (
               <Grid item key={file.name} className={classes.chipGridItem}>
-                <Confirmation
-                  message={{
-                    title: "Delete File",
-                    body: "Are you sure you want to delete this file?",
-                    confirm: "Delete",
+                <Chip
+                  icon={<FileIcon />}
+                  label={file.name}
+                  onClick={(e) => {
+                    window.open(file.downloadURL);
+                    e.stopPropagation();
                   }}
-                  functionName={!isReadonly ? "onDelete" : ""}
-                  stopPropagation
-                >
-                  <Chip
-                    icon={<FileIcon />}
-                    label={file.name}
-                    onClick={(e) => {
-                      window.open(file.downloadURL);
-                      e.stopPropagation();
-                    }}
-                    onDelete={
-                      !isReadonly ? () => handleDelete(file.ref) : undefined
-                    }
-                    className={classes.chip}
-                  />
-                </Confirmation>
+                  onDelete={
+                    !isReadonly
+                      ? () =>
+                          requestConfirmation({
+                            handleConfirm: () => handleDelete(file.ref),
+                            title: "Delete File",
+                            body: "Are you sure you want to delete this file?",
+                            confirm: "Delete",
+                          })
+                      : undefined
+                  }
+                  className={classes.chip}
+                />
               </Grid>
             ))}
         </Grid>

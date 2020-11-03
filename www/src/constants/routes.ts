@@ -4,6 +4,7 @@ export enum routes {
   googleAuth = "/googleAuth",
   completeAuth = "/completeAuth",
   impersonatorAuth = "/impersonatorAuth",
+  jwtAuth = "/jwtAuth",
   signOut = "/signOut",
 
   table = "/table",
