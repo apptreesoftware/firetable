@@ -21,11 +21,10 @@ import TableSettings from "./TableSettings";
 
 import { useFiretableContext } from "contexts/firetableContext";
 import { FieldType } from "constants/fields";
-import MigrateButton from "./MigrateButton";
-import HiddenFields from "./HiddenFields";
-import TableHeaderActionButton from "./TableHeaderActionButton";
-import { useSnackContext } from "../../contexts/snackContext";
 import useIsAdmin from "hooks/useIsAdmin";
+import HiddenFields from "../HiddenFields";
+import { useSnackContext } from "../../../contexts/snackContext";
+import TableHeaderActionButton from "../TableHeaderActionButton";
 export const TABLE_HEADER_HEIGHT = 56;
 
 const useStyles = makeStyles((theme) =>
@@ -197,10 +196,11 @@ export default function TableHeader({
         />
       </Grid>
       {/* <Settings /> */}
-
-      <Grid item>
-        <TableSettings />
-      </Grid>
+      {isAdmin && (
+        <Grid item>
+          <TableSettings />
+        </Grid>
+      )}
     </Grid>
   );
 }

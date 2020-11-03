@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import queryString from "query-string";
 
-import { Typography, Button } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 
-import AuthCard from "./AuthCard";
-
-import { handleGoogleAuth } from "./utils";
-import GoogleLogo from "assets/google-icon.svg";
 import { useSnackContext } from "contexts/snackContext";
-import { Link } from "react-router-dom";
-import { auth } from "../../firebase";
+import AuthCard from "components/Auth/AuthCard";
+
 export default function AppTreeSignIn() {
   const [loading, setLoading] = useState(false);
   const snack = useSnackContext();

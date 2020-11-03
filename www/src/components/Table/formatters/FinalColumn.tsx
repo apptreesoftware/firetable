@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { FormatterProps } from "react-data-grid";
 import {
-  makeStyles,
   createStyles,
   Grid,
-  Tooltip,
   IconButton,
+  makeStyles,
+  Tooltip,
 } from "@material-ui/core";
 import CopyCellsIcon from "assets/icons/CopyCells";
 import DeleteIcon from "@material-ui/icons/DeleteForever";
@@ -14,6 +14,7 @@ import { SnackContext } from "contexts/snackContext";
 import { useConfirmation } from "components/ConfirmationDialog/Context";
 import { useFiretableContext } from "contexts/firetableContext";
 import useKeyPress from "hooks/useKeyPress";
+import template from "lodash/template";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -82,6 +83,17 @@ export default function FinalColumn({ row }: FormatterProps<any, any>) {
                     delete clonedRow[key];
                   }
                 });
+                for (const [_k, col] of Object.entries(
+                  tableState?.columns ?? {}
+                )) {
+                  if (col.config.ignoreInCopy) {
+                    delete clonedRow[col.key];
+                  }
+                  if (col.config.copyFormat) {
+                    const compiled = template(col.config.copyFormat);
+                    clonedRow[col.key] = compiled(clonedRow);
+                  }
+                }
                 if (tableActions) tableActions?.row.add(clonedRow);
               }}
               aria-label="Duplicate row"
@@ -95,41 +107,39 @@ export default function FinalColumn({ row }: FormatterProps<any, any>) {
       {rowDeleteEnabled && !row._delete_disabled_ === true && (
         <Grid item>
           <Tooltip title="Delete row">
-
-              {shiftPress ? (
-                <IconButton
-                  size="small"
-                  color="inherit"
-                  onClick={handleDelete}
-                  aria-label="Delete row"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              ) : (
-                // <Confirmation
-                //   message={{
-                //     title: "Delete Row",
-                //     body: "Are you sure you want to delete this row?",
-                //     confirm: "Delete",
-                //   }}
-                // >
-                <IconButton
-                  size="small"
-                  color="inherit"
-                  onClick={() => {
-                    requestConfirmation({
-                      title: "Delete Row",
-                      body: "Are you sure you want to delete this row?",
-                      confirm: "Delete",
-                      handleConfirm: handleDelete,
-                    });
-                  }}
-                  aria-label="Delete row"
-                >
-                  <DeleteIcon />
-                </IconButton>
-                // </Confirmation>
-
+            {shiftPress ? (
+              <IconButton
+                size="small"
+                color="inherit"
+                onClick={handleDelete}
+                aria-label="Delete row"
+              >
+                <DeleteIcon />
+              </IconButton>
+            ) : (
+              // <Confirmation
+              //   message={{
+              //     title: "Delete Row",
+              //     body: "Are you sure you want to delete this row?",
+              //     confirm: "Delete",
+              //   }}
+              // >
+              <IconButton
+                size="small"
+                color="inherit"
+                onClick={() => {
+                  requestConfirmation({
+                    title: "Delete Row",
+                    body: "Are you sure you want to delete this row?",
+                    confirm: "Delete",
+                    handleConfirm: handleDelete,
+                  });
+                }}
+                aria-label="Delete row"
+              >
+                <DeleteIcon />
+              </IconButton>
+              // </Confirmation>
             )}
           </Tooltip>
         </Grid>

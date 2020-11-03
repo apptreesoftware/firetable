@@ -1,8 +1,8 @@
 import React from "react";
 import { IFieldProps } from "../utils";
 import { createStyles, makeStyles, Typography } from "@material-ui/core";
-import { MONO_FONT } from "Theme";
 import * as math from "mathjs";
+import { MONO_FONT } from "../../../../Themes";
 
 export interface ICalculatedProps extends IFieldProps {
   config: any;

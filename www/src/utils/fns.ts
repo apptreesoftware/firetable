@@ -1,4 +1,5 @@
 import _get from "lodash/get";
+import * as math from "mathjs";
 
 /**
  * reposition an element in an array
@@ -107,4 +108,23 @@ export async function asyncForEach(array: any[], callback: Function) {
 export const getCellValue = (row: Record<string, any>, key: string) => {
   if (key.includes(".")) return _get(row, key);
   return row[key];
+};
+
+export const getCalculatedValue = (row: Record<string, any>, eq: string) => {
+  try {
+    const parseResult = math.parse(eq);
+    const data: any = {};
+    Object.assign(data, row);
+    parseResult.forEach((node, path, parent) => {
+      if (node.isSymbolNode && node.name) {
+        if (!data[node.name]) {
+          data[node.name] = 0;
+        }
+      }
+    });
+    return math.evaluate(eq, data);
+  } catch (e) {
+    console.error(e);
+    return "NaN";
+  }
 };

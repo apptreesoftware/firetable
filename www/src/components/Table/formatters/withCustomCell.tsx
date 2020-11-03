@@ -8,7 +8,7 @@ import ErrorBoundary from "components/ErrorBoundary";
 import { useFiretableContext } from "../../../contexts/firetableContext";
 
 import { FieldType } from "constants/fields";
-import { getCellValue } from "utils/fns";
+import { getCalculatedValue, getCellValue } from "utils/fns";
 
 // const useStyles = makeStyles((theme) =>
 //   createStyles({
@@ -80,9 +80,15 @@ const withCustomCell = (
 ) => (props: FormatterProps<any>) => {
   // useStyles();
   const { updateCell } = useFiretableContext();
+  const columnInfo = props.column as any;
 
-  const value = getCellValue(props.row, props.column.key as string);
+  let value = getCellValue(props.row, props.column.key as string);
+  if (columnInfo.type === FieldType.calculated) {
+    value = getCalculatedValue(props.row, columnInfo.config.equation);
+  }
+
   const [localValue, setLocalValue] = useState(value);
+
   useEffect(() => {
     setLocalValue(value);
   }, [value]);

@@ -34,6 +34,33 @@ const ConfigFields = ({
   columns,
   roles,
 }) => {
+  const ignoreCopyField = (
+    <>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={config.ignoreInCopy}
+            onChange={() =>
+              handleChange("ignoreInCopy")(!Boolean(config.ignoreInCopy))
+            }
+            name="ignore-copy"
+          />
+        }
+        label="Ignore when copying a row"
+      />
+      <TextField
+        label="Copy Format"
+        name="copyFormat"
+        value={config.copyFormat}
+        disabled={config.ignoreInCopy === true}
+        fullWidth
+        onChange={(e) => {
+          handleChange("copyFormat")(e.target.value);
+        }}
+      />
+    </>
+  );
+
   switch (fieldType) {
     case FieldType.longText:
     case FieldType.shortText:
@@ -49,6 +76,7 @@ const ConfigFields = ({
               else handleChange("maxLength")(e.target.value);
             }}
           />
+          {ignoreCopyField}
         </>
       );
     case FieldType.singleSelect:
@@ -71,6 +99,7 @@ const ConfigFields = ({
               }}
             />
           </Grid>
+          {ignoreCopyField}
         </>
       );
     case FieldType.calculated:
@@ -91,6 +120,7 @@ const ConfigFields = ({
               handleChange("equation")(e.target.value);
             }}
           />
+          {ignoreCopyField}
         </>
       );
     case FieldType.connectService:
@@ -155,6 +185,7 @@ const ConfigFields = ({
             }
             label="Enable multiple item selection"
           />
+          {ignoreCopyField}
         </>
       );
     case FieldType.connectTable:
@@ -191,6 +222,7 @@ const ConfigFields = ({
               handleChange("filters")(e.target.value);
             }}
           />
+          {ignoreCopyField}
         </>
       );
     case FieldType.subTable:
@@ -242,6 +274,7 @@ const ConfigFields = ({
             min={0.25}
             max={1}
           />
+          {ignoreCopyField}
         </>
       );
     case FieldType.action:
@@ -543,7 +576,7 @@ switch (triggerType){
         </>
       );
     default:
-      return <></>;
+      return <>{ignoreCopyField}</>;
   }
 };
 const ConfigForm = ({ type, config, handleChange }) => {

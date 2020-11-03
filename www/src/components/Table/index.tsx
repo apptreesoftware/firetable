@@ -14,8 +14,6 @@ import "react-data-grid/dist/react-data-grid.css";
 import DataGrid, {
   Column,
   SelectColumn as _SelectColumn,
-  CellNavigationMode,
-  ScrollPosition,
 } from "react-data-grid";
 import { formatSubTableName } from "../../utils/fns";
 import Loading from "components/Loading";

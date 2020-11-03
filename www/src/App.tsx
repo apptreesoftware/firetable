@@ -19,8 +19,8 @@ import routes from "constants/routes";
 
 import AuthView from "pages/Auth/GoogleAuth";
 import SignOutView from "pages/Auth/SignOut";
-import CompleteAuthView from "./views/CompleteAuthView";
-import AppTreeSignIn from "views/AuthViews/AppTreeSignIn";
+import AppTreeSignIn from "./pages/Auth/AppTreeSignIn";
+import CompleteAuthView from "./pages/CompleteAuthView";
 
 const HomePage = lazy(
   () => import("./pages/Home" /* webpackChunkName: "HomePage" */)
