@@ -1,6 +1,6 @@
 import { functions } from "./../firebase/index";
 import { useEffect, useReducer, useState } from "react";
-
+import _get from "lodash/get";
 const searchReducer = (prevState: any, newProps: any) => {
   return { ...prevState, ...newProps };
 };
@@ -56,8 +56,8 @@ async function performSearch(opts: {
       actionId: opts.action,
       query: opts.searchText,
     });
-
-    return results.data[opts.resultsKey];
+    const data = results.data;
+    return _get(data, opts.resultsKey);
   } catch (e) {
     console.error("Service returned invalid result", e);
     return [];
