@@ -3,6 +3,18 @@
     "target": "apptreeio-data",
     "public": "build",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Frame-Options", "value": "deny" },
+          {
+            "key": "strict-transport-security",
+            "value": "max-age=31536000; includeSubDomains; preload"
+          }
+        ]
+      }
+    ],
     "rewrites": [
       {
         "source": "**",
