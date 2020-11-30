@@ -1,22 +1,20 @@
-import * as React from "react";
-import SvgIcon, { SvgIconProps } from "@material-ui/core/SvgIcon";
-import { useTheme, Typography } from "@material-ui/core";
-function getColorByBgColor(bgColor) {
-  if (!bgColor) {
-    return "";
-  }
-  return parseInt(bgColor.replace("#", ""), 16) > 0xffffff / 2
-    ? "#000"
-    : "#fff";
-}
-export default function Firetable(props: SvgIconProps) {
+import React from "react";
+
+import { useTheme } from "@material-ui/core";
+
+export default function FiretableLogo() {
   const theme = useTheme();
+
   const primaryColor = theme.palette.primary.main;
-  //const strokeColor = getColorByBgColor(primaryColor);
-  const strokeColor = "#fff";
+  const strokeColor = "#FFF";
+
   return (
-    <svg width="140" height="32" viewBox="0 0 140 32" role="img">
-      <title>Firetable</title>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="140"
+      height="32"
+      viewBox="0 0 140 32"
+    >
       <g fill="none" fillRule="evenodd">
         <rect width="32" height="32" fill={primaryColor} rx="2.667" />
         <g fill={strokeColor}>

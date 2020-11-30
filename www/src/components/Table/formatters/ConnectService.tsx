@@ -4,7 +4,7 @@ import { CustomCellProps } from "./withCustomCell";
 import _get from "lodash/get";
 import { createStyles, makeStyles, Grid, Chip } from "@material-ui/core";
 
-import { useFiretableContext } from "contexts/firetableContext";
+import { useFiretableContext } from "contexts/FiretableContext";
 import ConnectServiceSelect from "components/ConnectServiceSelect";
 
 const useStyles = makeStyles((theme) =>
