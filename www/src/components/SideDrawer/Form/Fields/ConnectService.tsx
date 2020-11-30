@@ -1,7 +1,6 @@
 import React from "react";
-import { Controller, useWatch } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { IFieldProps } from "../utils";
-import { inspect } from "util";
 import { Chip, Grid, useTheme } from "@material-ui/core";
 import { get } from "lodash";
 import ConnectServiceSelect, {
