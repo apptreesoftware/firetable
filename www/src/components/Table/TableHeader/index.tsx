@@ -19,7 +19,7 @@ import ImportCSV from "./ImportCsv";
 import ExportCSV from "./ExportCsv";
 import TableSettings from "./TableSettings";
 
-import { useFiretableContext } from "contexts/firetableContext";
+import { useFiretableContext } from "contexts/FiretableContext";
 import { FieldType } from "constants/fields";
 import useIsAdmin from "hooks/useIsAdmin";
 import HiddenFields from "../HiddenFields";
