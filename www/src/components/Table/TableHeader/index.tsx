@@ -23,7 +23,7 @@ import { useFiretableContext } from "contexts/FiretableContext";
 import { FieldType } from "constants/fields";
 import useIsAdmin from "hooks/useIsAdmin";
 import HiddenFields from "../HiddenFields";
-import { useSnackContext } from "../../../contexts/snackContext";
+import { useSnackContext } from "../../../contexts/SnackContext";
 import TableHeaderActionButton from "../TableHeaderActionButton";
 export const TABLE_HEADER_HEIGHT = 56;
 
@@ -128,9 +128,7 @@ export default function TableHeader({
       <Grid item>
         <HiddenFields />
       </Grid>
-      <Grid item>
-        <Filters />
-      </Grid>
+      <Grid item>{/*<Filters />*/}</Grid>
 
       <Grid item xs className={classes.spacer} />
 
@@ -178,9 +176,7 @@ export default function TableHeader({
           <ImportCSV />
         </Grid>
       )}
-      <Grid item>
-        <ExportCSV />
-      </Grid>
+      <Grid item>{/*<ExportCSV />*/}</Grid>
 
       <Grid item>
         <TableHeaderActionButton

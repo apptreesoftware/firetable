@@ -5,7 +5,7 @@ import { FIELDS } from "@antlerengineering/form-builder";
 import { TableSettingsDialogModes } from "./index";
 
 import HelperText from "./HelperText";
-import { Link, ListItemSecondaryAction, Typography } from "@material-ui/core";
+import { Link, Typography } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { MONO_FONT } from "Themes";
 
@@ -98,9 +98,19 @@ export const tableSettings = (
   },
   {
     type: FIELDS.text,
-    name: "copySchema",
-    label: "Copy Schema",
+    name: "orderBy",
+    label: "Default Sort (Eg. name,asc)",
+    validation: yup.string(),
   },
+  () =>
+    mode === TableSettingsDialogModes.create
+      ? {
+          type: FIELDS.text,
+          name: "copySchema",
+          label: "Copy Schema",
+        }
+      : null,
+
   {
     type: FIELDS.text,
     name: "description",
@@ -159,7 +169,7 @@ export const tableSettings = (
     ),
   }),
   () =>
-    mode === TableSettingsDialogModes.create && tables?.length !== 0
+    mode === TableSettingsDialogModes.create && tables?.length !== 0 && false
       ? {
           type: FIELDS.multiSelect,
           name: "schemaSource",

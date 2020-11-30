@@ -37,6 +37,7 @@ export default function TableSettings() {
                 description: tableState?.config.tableConfig.doc.description,
                 roles: tableState?.config.tableConfig.doc.roles,
                 name: tableState?.config.tableConfig.doc.name,
+                orderBy: tableState?.config.tableConfig.doc.orderBy,
                 section: tableState?.config.tableConfig.doc.section,
                 // isCollectionGroup: !"string",
                 // tableType: "string",

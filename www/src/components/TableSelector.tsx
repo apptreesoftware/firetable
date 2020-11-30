@@ -1,4 +1,4 @@
-import { Table, useFiretableContext } from "../contexts/firetableContext";
+import { Table, useFiretableContext } from "../contexts/FiretableContext";
 import MultiSelect, { Option } from "@antlerengineering/multiselect";
 import React from "react";
 
