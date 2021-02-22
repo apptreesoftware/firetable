@@ -26,6 +26,7 @@ const tableInitialState = {
   limit: 50,
   loading: true,
   cap: CAP,
+  searchTerm: "",
 };
 
 const useTable = (initialOverrides: any) => {
@@ -40,8 +41,10 @@ const useTable = (initialOverrides: any) => {
    *  @param filters
    *  @param limit max number of docs
    *  @param orderBy
+   *  @param searchTerm text to filter by
    */
   const getRows = (
+    searchTerm: "",
     filters: {
       key: string;
       operator: "==" | "<" | ">" | ">=" | "<=";
@@ -161,6 +164,7 @@ const useTable = (initialOverrides: any) => {
       path,
       orderBy,
       unsubscribe,
+      searchTerm,
     } = tableState;
 
     if (
@@ -173,7 +177,7 @@ const useTable = (initialOverrides: any) => {
       if (unsubscribe) {
         tableState.unsubscribe();
       }
-      getRows(filters, limit, orderBy);
+      getRows(searchTerm, filters, limit, orderBy);
     }
     return () => {
       if (unsubscribe) {
