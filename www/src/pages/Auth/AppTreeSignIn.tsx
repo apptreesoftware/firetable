@@ -3,7 +3,7 @@ import queryString from "query-string";
 
 import { Button, Typography } from "@material-ui/core";
 
-import { useSnackContext } from "contexts/snackContext";
+import { useSnackContext } from "contexts/SnackContext";
 import AuthCard from "components/Auth/AuthCard";
 
 export default function AppTreeSignIn() {

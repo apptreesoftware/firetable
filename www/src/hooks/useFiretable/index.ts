@@ -1,6 +1,7 @@
 import { functions } from "../../firebase";
 import useTable from "./useTable";
 import useTableConfig from "./useTableConfig";
+import { useEffect } from "react";
 
 export type FiretableActions = {
   // TODO: Stricter types here
@@ -85,8 +86,21 @@ const useFiretable = (
   const setOrder = (orderBy: FiretableOrderBy) => {
     tableActions.dispatch({ orderBy });
   };
+
+  useEffect(() => {
+    if (tableConfig.doc?.orderBy) {
+      const orderComp = tableConfig.doc.orderBy.split(",");
+      if (
+        orderComp.length === 2 &&
+        (orderComp[1] == "asc" || orderComp[1] == "desc")
+      ) {
+        setOrder([{ key: orderComp[0], direction: orderComp[1] }]);
+      }
+    }
+  }, [tableConfig.doc]);
+
   const state: FiretableState = {
-    orderBy: tableState.orderBy,
+    orderBy: tableState.orderBy ?? tableConfig.doc?.orderBy,
     tablePath: tableState.path,
     filters: tableState.filters,
     columns: tableConfig.columns,

@@ -1,5 +1,6 @@
 import _get from "lodash/get";
 import * as math from "mathjs";
+import { MathNode } from "mathjs";
 
 /**
  * reposition an element in an array
@@ -116,15 +117,22 @@ export const getCalculatedValue = (row: Record<string, any>, eq: string) => {
     const data: any = {};
     Object.assign(data, row);
     parseResult.forEach((node, path, parent) => {
-      if (node.isSymbolNode && node.name) {
-        if (!data[node.name]) {
-          data[node.name] = 0;
-        }
-      }
+      zeroNullData(node, data);
     });
     return math.evaluate(eq, data);
   } catch (e) {
+    console.log(e);
     console.error(e);
     return "NaN";
   }
 };
+
+function zeroNullData(node: MathNode, data: any) {
+  if (node.isSymbolNode && node.name) {
+    if (!data[node.name]) {
+      data[node.name] = 0;
+    }
+  } else {
+    node.forEach((n) => zeroNullData(n, data));
+  }
+}

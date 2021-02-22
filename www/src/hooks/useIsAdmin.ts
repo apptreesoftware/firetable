@@ -1,5 +1,4 @@
-import { useAppContext } from "contexts/appContext";
-import firetableContext from "contexts/firetableContext";
+import firetableContext from "contexts/FiretableContext";
 import { useContext, useEffect, useState } from "react";
 
 export default function useIsAdmin() {

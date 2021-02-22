@@ -19,9 +19,9 @@ import CloseIcon from "assets/icons/Backburger";
 import AddIcon from "@material-ui/icons/Add";
 
 import { APP_BAR_HEIGHT } from ".";
-import FiretableLogo from "assets/Firetable";
+import FiretableLogo from "assets/FiretableLogo";
 
-import { useFiretableContext } from "contexts/firetableContext";
+import { useFiretableContext } from "contexts/FiretableContext";
 import useRouter from "hooks/useRouter";
 import useIsAdmin from "hooks/useIsAdmin";
 

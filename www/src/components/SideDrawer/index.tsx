@@ -12,7 +12,7 @@ import Form from "./Form";
 import { Field } from "./Form/utils";
 import ErrorBoundary from "components/ErrorBoundary";
 import { useStyles } from "./useStyles";
-import { useFiretableContext } from "contexts/firetableContext";
+import { useFiretableContext } from "contexts/FiretableContext";
 import { FieldType } from "constants/fields";
 import useDoc from "hooks/useDoc";
 
