@@ -27,6 +27,7 @@ const tableInitialState = {
   loading: true,
   cap: CAP,
   searchTerm: "",
+  prevSearchTerm: "",
 };
 
 const useTable = (initialOverrides: any) => {
@@ -64,7 +65,28 @@ const useTable = (initialOverrides: any) => {
       prevPath: tableState.path,
       prevOrderBy: tableState.orderBy,
       loading: true,
+      prevSearchTerm: searchTerm,
     });
+
+    if (searchTerm) {
+      cloudFunction(
+        "searchFiretable",
+        { collection: tableState.path, search: searchTerm },
+        (resp) => {
+          const results = resp.data.hits.map((r) => {
+            const id = r.objectID;
+            const ref = db.collection(tablePath(tableState.path)).doc(id);
+            return { ...r, id, ref };
+          });
+          tableDispatch({ rows: results, loading: false });
+        },
+        (e) => {
+          console.log(`Unable to search firetable: ${e}`);
+        }
+      );
+      return;
+    }
+
     let query:
       | firebase.firestore.CollectionReference
       | firebase.firestore.Query = isCollectionGroup()
@@ -165,18 +187,21 @@ const useTable = (initialOverrides: any) => {
       orderBy,
       unsubscribe,
       searchTerm,
+      prevSearchTerm,
     } = tableState;
 
     if (
       (prevPath !== path ||
         !equals(prevFilters, filters) ||
         prevLimit !== limit ||
-        prevOrderBy !== orderBy) &&
+        prevOrderBy !== orderBy ||
+        searchTerm !== prevSearchTerm) &&
       path
     ) {
       if (unsubscribe) {
         tableState.unsubscribe();
       }
+
       getRows(searchTerm, filters, limit, orderBy);
     }
     return () => {
@@ -189,6 +214,7 @@ const useTable = (initialOverrides: any) => {
     tableState.limit,
     tableState.path,
     tableState.orderBy,
+    tableState.searchTerm,
   ]);
   /**  used deleting row/doc
    *  @param rowIndex local position
@@ -226,6 +252,10 @@ const useTable = (initialOverrides: any) => {
       });
     }
     if (filters) tableDispatch({ filters });
+  };
+
+  const setSearch = (searchTerm: string) => {
+    tableDispatch({ searchTerm: searchTerm });
   };
 
   const filterReducer = (acc, curr) => {
@@ -287,6 +317,7 @@ const useTable = (initialOverrides: any) => {
     setTable,
     addRow,
     moreRows,
+    setSearch,
     dispatch: tableDispatch,
   };
   return [tableState, tableActions];

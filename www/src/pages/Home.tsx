@@ -100,6 +100,7 @@ export default function HomePage() {
       copySchema: string;
       tableActions: TableAction[];
       tableType: string;
+      searchEnabled: boolean;
     };
   }>({
     mode: null,

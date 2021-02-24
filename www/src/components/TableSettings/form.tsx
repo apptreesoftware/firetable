@@ -5,9 +5,11 @@ import { FIELDS } from "@antlerengineering/form-builder";
 import { TableSettingsDialogModes } from "./index";
 
 import HelperText from "./HelperText";
-import { Link, Typography } from "@material-ui/core";
+import { IconButton, Link, Typography } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { MONO_FONT } from "Themes";
+import { cloudFunction } from "../../firebase/callables";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 export const tableSettings = (
   mode: TableSettingsDialogModes | null,
@@ -118,6 +120,30 @@ export const tableSettings = (
     fieldVariant: "long",
     validation: yup.string(),
   },
+  {
+    type: FIELDS.checkbox,
+    name: "searchEnabled",
+    label: "Search Enabled",
+    defaultValue: false,
+  },
+  (values) => ({
+    type: FIELDS.description,
+    description: (
+      <HelperText>
+        Re-index this table. Use this if this table was created before search
+        was enabled
+        <IconButton
+          onClick={() =>
+            cloudFunction("indexFiretableCollection", {
+              collection: values.collection,
+            })
+          }
+        >
+          <RefreshIcon />
+        </IconButton>
+      </HelperText>
+    ),
+  }),
   {
     type: FIELDS.checkbox,
     name: "rowCopyEnabled",

@@ -39,6 +39,12 @@ export default function TableSettings() {
                 name: tableState?.config.tableConfig.doc.name,
                 orderBy: tableState?.config.tableConfig.doc.orderBy,
                 section: tableState?.config.tableConfig.doc.section,
+                searchEnabled: tableState?.config.tableConfig.doc.searchEnabled,
+                rowCopyEnabled:
+                  tableState?.config.tableConfig.doc.rowCopyEnabled,
+                rowDeleteEnabled:
+                  tableState?.config.tableConfig.doc.rowDeleteEnabled,
+                rowAddEnabled: tableState?.config.tableConfig.doc.rowAddEnabled,
                 // isCollectionGroup: !"string",
                 // tableType: "string",
               } as any)

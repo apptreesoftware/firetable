@@ -25,6 +25,7 @@ import useIsAdmin from "hooks/useIsAdmin";
 import HiddenFields from "../HiddenFields";
 import { useSnackContext } from "../../../contexts/SnackContext";
 import TableHeaderActionButton from "../TableHeaderActionButton";
+import SearchField from "./SearchField";
 export const TABLE_HEADER_HEIGHT = 56;
 
 const useStyles = makeStyles((theme) =>
@@ -91,6 +92,7 @@ export default function TableHeader({
   const tempColumns = needsMigration ? columns : Object.values(columns);
   const rowAddEnabled =
     tableState?.config?.tableConfig?.doc?.rowAddEnabled ?? false;
+  const searchEnabled = tableState?.config?.tableConfig?.doc?.searchEnabled;
 
   return (
     <Grid
@@ -121,7 +123,6 @@ export default function TableHeader({
           </Button>
         </Grid>
       )}
-
       {/* Spacer */}
       <Grid item />
 
@@ -131,6 +132,11 @@ export default function TableHeader({
       <Grid item>{/*<Filters />*/}</Grid>
 
       <Grid item xs className={classes.spacer} />
+      {searchEnabled && (
+        <Grid item>
+          <SearchField />
+        </Grid>
+      )}
 
       <Grid item>
         <Typography variant="overline" component="label" htmlFor="rowHeight">

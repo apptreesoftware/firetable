@@ -20,6 +20,7 @@ export type FiretableActions = {
     updateConfig: Function;
     orderBy: Function;
     performAction: Function;
+    search: Function;
   };
 };
 
@@ -83,6 +84,11 @@ const useFiretable = (
   const filterTable = (filters: FireTableFilter[]) => {
     tableActions.dispatch({ filters });
   };
+
+  const searchTable = (search: string) => {
+    tableActions.setSearch(search);
+  };
+
   const setOrder = (orderBy: FiretableOrderBy) => {
     tableActions.dispatch({ orderBy });
   };
@@ -135,6 +141,7 @@ const useFiretable = (
       orderBy: setOrder,
       filter: filterTable,
       performAction: performTableAction,
+      search: searchTable,
     },
   };
 

@@ -36,6 +36,7 @@ export interface ICreateTableDialogProps {
     isCollectionGroup: boolean;
     roles: string[];
     copySchema: string;
+    searchEnabled: boolean;
   } | null;
 }
 
@@ -47,6 +48,7 @@ const FORM_EMPTY_STATE = {
   isCollectionGroup: false,
   roles: ["ADMIN"],
   copySchema: "",
+  searchEnabled: false,
 };
 
 const useStyles = makeStyles((theme) =>
